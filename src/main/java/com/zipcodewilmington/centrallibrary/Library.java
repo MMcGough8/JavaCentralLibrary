@@ -32,11 +32,12 @@ public class Library {
 
     public void displayAllItems() {
         System.out.println("=== Library Items ===");
-        int count = 1;
+        System.out.printf("%-15s %-30s %-15s%n".formatted("Type", "Title", "Status"));
+        System.out.println("----------------------------------------------------------");
         for (LibraryItem item : items) {
-            System.out.println(count + ". " + item.getTitle());
-            count++;
+            String availability = item.isAvailable() ? "Available" : "Checked Out";
+            System.out.printf("%-15s %-30s %-15s%n", item.getItemType(), item.getTitle(), availability);
         }
         System.out.println("Total items: " + items.size());
-    }
+        }
 }
