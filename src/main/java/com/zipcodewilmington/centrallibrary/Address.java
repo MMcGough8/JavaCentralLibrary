@@ -1,6 +1,6 @@
 package com.zipcodewilmington.centrallibrary;
 
-// TEMPORARY SUB - Toni will provide real version
+// TEMPORARY SUB
 public class Address {
     private String street;
     private String city;

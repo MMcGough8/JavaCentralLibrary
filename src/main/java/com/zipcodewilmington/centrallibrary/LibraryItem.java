@@ -1,6 +1,6 @@
 package com.zipcodewilmington.centrallibrary;
 
-// TEMPORARY SUB - will be replaced by Ben's implementation.
+// TEMPORARY SUB 
 public class LibraryItem {
     private String id;
     private String title;
