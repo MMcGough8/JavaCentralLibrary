@@ -32,8 +32,11 @@ public class Library {
 
     public void displayAllItems() {
         System.out.println("=== Library Items ===");
+        int count = 1;
         for (LibraryItem item : items) {
-            System.out.println(item.getTitle());
+            System.out.println(count + ". " + item.getTitle());
+            count++;
         }
+        System.out.println("Total items: " + items.size());
     }
 }
