@@ -29,4 +29,11 @@ public class Library {
     public void addItem(LibraryItem item) {
         items.add(item);
     }
+
+    public void displayAllItems() {
+        System.out.println("=== Library Items ===");
+        for (LibraryItem item : items) {
+            System.out.println(item.getTitle());
+        }
+    }
 }
