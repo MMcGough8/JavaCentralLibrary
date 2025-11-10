@@ -31,7 +31,11 @@ public class Library {
     }
 
     public void displayAllItems() {
-        System.out.println("=== Library Items ===");
+        String header = "=== Library Items ===";
+        int totalWidth = 60;
+        int padding = (totalWidth - header.length()) / 2;
+        System.out.println(" ".repeat(padding) + header);
+        System.out.println("----------------------------------------------------------");
         System.out.printf("%-15s %-30s %-15s%n".formatted("Type", "Title", "Status"));
         System.out.println("----------------------------------------------------------");
         for (LibraryItem item : items) {
