@@ -3,7 +3,6 @@ package com.zipcodewilmington.centrallibrary;
 import java.util.List;
 
 public interface Searchable {
-    public static void main(String[] args) {}
         List<String> getSearchableFields();
         
         default boolean matchesKeyword(String keyword) {
