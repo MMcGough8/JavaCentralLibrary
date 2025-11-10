@@ -2,20 +2,44 @@ package com.zipcodewilmington.centrallibrary;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.beans.beancontext.BeanContext;
 import java.util.List;
 
-public class ReservableTest { 
-    static class MockReservable implements Reservable {
-        private final List<String> fields;
-        public MockReservable(List<String> fields) {
-            this.fields = fields;
-        }
-        @Override
-        public List<String> getReservableFields() {
-            return fields;
+public class ReservableTest {
+    
+    // Simple mock LibraryMember for testing
+    static class MockLibraryMember {
+        private String name;
+        public MockLibraryMember(String name) {
+            this.name = name;
         }
     }
-    @Test public void Test(R)
-
     
+    // Mock implementation of Reservable
+    static class MockReservable implements Reservable {
+        private boolean reserved = false;        // asks "is it reserved?"
+        private MockLibraryMember reservedBy = null;    // tracks who reserved it
+        
+        @Override
+        public void reserve(MockLibraryMember libraryMember) {
+            this.reserved = true;
+            this.reservedBy = libraryMember;
+        }
+        
+        @Override
+        public void cancelReserve(MockLibraryMember libraryMember) {
+            this.reserved = false;   // item is cancelled, so reservation is removed
+            this.reservedBy = null;  // reserved by is null because the item is longer reserved
+        }
+        
+        @Override
+        public boolean isReserved() {
+            return this.reserved; 
+        }
+    }
+    
+    @Test
+    public void testReserveItem() {
+        // Your test code here
+    }
 }
