@@ -30,6 +30,16 @@ public class Library {
         items.add(item);
     }
 
+    public boolean removeItem(String itemId) {
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getId().equals(itemId)) {
+                items.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void displayAllItems() {
         String header = "=== Library Items ===";
         int totalWidth = 60;
