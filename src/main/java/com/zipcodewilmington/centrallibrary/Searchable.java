@@ -4,19 +4,17 @@ import java.util.List;
 
 public interface Searchable {
     public static void main(String[] args) {}
-    
-    List<String> getSearchableFields();
+        List<String> getSearchableFields();
+        
+        default boolean matchesKeyword(String keyword) {
+            if (keyword == null || keyword.isEmpty()) return false;
+            String lowerKeyword = keyword.toLowerCase();
 
-    
-    default boolean matchesKeyword(String keyword) {
-        if (keyword == null || keyword.isEmpty()) return false;
-        String lowerKeyword = keyword.toLowerCase();
-
-        for (String field : getSearchableFields()) {
-            if (field != null && field.toLowerCase().contains(lowerKeyword)) {
-                return true;
+            for (String field : getSearchableFields()) {
+                if (field != null && field.toLowerCase().contains(lowerKeyword)) {
+                    return true;
+                }
             }
+            return false;
         }
-        return false;
-    }
 }
