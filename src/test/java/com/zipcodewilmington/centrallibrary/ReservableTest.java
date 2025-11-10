@@ -40,6 +40,24 @@ public class ReservableTest {
     
     @Test
     public void testReserveItem() {
-        // Your test code here
+        MockLibraryMember member = new MockLibraryMember("Ben");
+        MockReservable item = new MockReservable();    // creates an item to reserve
+
+        item.reserve(member);  
+
+        assertTrue(item.isReserved());
+    }
+
+    @Test
+    public void testCancelReserve() {
+        MockLibraryMember member = new MockLibraryMember("Ben");
+        MockReservable item = new MockReservable();
+
+        item.reserve(member);  
+        
+        item.cancelReserve(member);
+
+        assertFalse(item.isReserved());
+
     }
 }
