@@ -6,6 +6,10 @@ public abstract class LibraryItem {
     protected String title;
     protected String location;
     protected boolean isAvailable;
+    protected String author;
+    protected String genre;
+    protected String isbn;
+    protected String numOfPages;
     
     public LibraryItem(String id, String title, String location) {
         this.id = id;
@@ -14,6 +18,14 @@ public abstract class LibraryItem {
         this.isAvailable = true;
     }
     
+    public LibraryItem(String author, String title, String genre, String numOfPages) {
+        this.author = author;
+        this.title = title;
+        this.genre = genre;
+        this.isAvailable = true;
+        this.numOfPages = numOfPages;
+    }
+
     public String getId() {
         return id;
     }
