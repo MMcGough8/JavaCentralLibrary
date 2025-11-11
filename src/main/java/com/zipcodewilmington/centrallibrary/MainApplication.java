@@ -5,5 +5,9 @@ package com.zipcodewilmington.centrallibrary;
  */
 public class MainApplication {
 
+<<<<<<< HEAD
+=======
+        public static void main(String[] args) {}
+>>>>>>> origin/devesh
 
 }
