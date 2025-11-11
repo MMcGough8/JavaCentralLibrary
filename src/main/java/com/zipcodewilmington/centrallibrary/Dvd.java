@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class Dvd extends LibraryItem implements Reservable {
     private String director;
-    private int duration; // in m
+    private int duration; // in minutes
     private String rating;
     private String genre;
     private boolean isReserved;

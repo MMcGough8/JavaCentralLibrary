@@ -6,10 +6,10 @@ package com.zipcodewilmington.centrallibrary;
  */
 public abstract class LibraryItem implements Searchable {
     
-    private String id;
-    private String title;
-    private String location;
-    private boolean isAvailable;
+    protected String id;
+    protected String title;
+    protected String location;
+    protected boolean isAvailable;
     
     /**
      * Constructor for LibraryItem
