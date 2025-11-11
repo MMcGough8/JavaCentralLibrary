@@ -1,19 +1,27 @@
 package com.zipcodewilmington.centrallibrary;
 
-public abstract class LibraryItem {
+/**
+ * Abstract LibraryItem class representing an item in the library.
+ * Implements Searchable interface and serves as base class for Book, Periodical, and DVD.
+ */
+public abstract class LibraryItem implements Searchable {
     
-    protected String id;
-    protected String title;
-    protected String location;
-    protected boolean isAvailable;
+    private String id;
+    private String title;
+    private String location;
+    private boolean isAvailable;
     
+    /**
+     * Constructor for LibraryItem
+     */
     public LibraryItem(String id, String title, String location) {
         this.id = id;
         this.title = title;
         this.location = location;
-        this.isAvailable = true;
+        this.isAvailable = true; // Item is available when created
     }
     
+    // Getters
     public String getId() {
         return id;
     }
@@ -26,63 +34,58 @@ public abstract class LibraryItem {
         return location;
     }
     
-    public void setLocation(String location) {
-        this.location = location;
-    }
-    
     public boolean isAvailable() {
         return isAvailable;
     }
     
-    public boolean checkOut() {
+    // Setters
+    public void setId(String id) {
+        this.id = id;
+    }
+    
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    
+    public void setLocation(String location) {
+        this.location = location;
+    }
+    
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
+    
+    /**
+     * Check out an item (makes it unavailable)
+     */
+    public void checkOut() {
         if (isAvailable) {
             isAvailable = false;
-            return true;
         }
-        return false;
     }
     
-    public boolean checkIn() {
-        if (!isAvailable) {
-            isAvailable = true;
-            return true;
-        }
-        return false;
+    /**
+     * Check in an item (makes it available)
+     */
+    public void checkIn() {
+        isAvailable = true;
     }
     
-    public abstract double calculateLateFee(int daysOverdue);
+    /**
+     * Abstract method for calculating late fees
+     */
+    public abstract double calculateLateFee(int daysLate);
     
+    /**
+     * Abstract method for getting max borrow days
+     */
     public abstract int getMaxBorrowDays();
     
+    /**
+     * Abstract method for getting item type
+     */
     public abstract String getItemType();
     
-    public boolean matchesKeyword(String keyword) {
-        if (keyword == null || keyword.trim().isEmpty()) {
-            return false;
-        }
-        
-        String lowerKeyword = keyword.toLowerCase();
-        return title.toLowerCase().contains(lowerKeyword) ||
-               id.toLowerCase().contains(lowerKeyword);
-    }
-    
     @Override
-    public String toString() {
-        return String.format("%s: %s (ID: %s, Location: %s, Available: %s)",
-                getItemType(), title, id, location, isAvailable ? "Yes" : "No");
-    }
-    
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        
-        LibraryItem that = (LibraryItem) obj;
-        return id.equals(that.id);
-    }
-    
-    @Override
-    public int hashCode() {
-        return id.hashCode();
-    }
+    public abstract java.util.List<String> getSearchableFields();
 }
