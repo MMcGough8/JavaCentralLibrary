@@ -14,9 +14,5 @@ public class MainApplicationTest {
     public void shouldAnswerWithTrue() {
         Assertions.assertTrue(true);
     }
-<<<<<<< HEAD
 
 }
-=======
-}
->>>>>>> origin/devesh
