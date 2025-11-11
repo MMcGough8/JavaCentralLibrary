@@ -1,11 +1,14 @@
 package com.zipcodewilmington.centrallibrary;
 
-public class Book extends LibraryItem {
+public class Book extends LibraryItem implements Reservable {
     
     private String isbn;
     private String author;
     private String genre;
     private int numOfPages;
+    private boolean isReserved;
+    private LibraryMember reservedBy;
+    
     
     public Book(String author, String title, String isbn, String genre, int numOfPages) {
         super(author, title, genre);
@@ -14,6 +17,8 @@ public class Book extends LibraryItem {
         this.isbn = isbn;
         this.genre = genre;
         this.numOfPages = numOfPages;
+        this.isReserved = false;
+        this.reservedBy = null;
     }
     
     @Override
@@ -40,14 +45,45 @@ public class Book extends LibraryItem {
     }
 
     public boolean matchesKeyword(String keyword) {
-    if (keyword == null || keyword.trim().isEmpty()) {
-        return false; 
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return false; 
     }
     String lower = keyword.toLowerCase();
-    return getTitle().toLowerCase().contains(lower)
-            || author.toLowerCase().contains(lower)
-            || isbn.toLowerCase().contains(lower)
-            || genre.toLowerCase().contains(lower);
+        return getTitle().toLowerCase().contains(lower)
+                || author.toLowerCase().contains(lower)
+                || isbn.toLowerCase().contains(lower)
+                || genre.toLowerCase().contains(lower);
+    }
+
+    public boolean isReserved() {
+        return isReserved;
+        } 
+
+    public void reserve(LibraryMember libraryMember) {
+    if (isReserved) { 
+        throw new Error("Book is already reserved");
+    } else {
+        this.isReserved = true;  // 
+        this.reservedBy = libraryMember; 
+    }
+    }
+
+    public void cancelReserve(LibraryMember libraryMember) {
+    if (!isReserved) {
+        throw new Error("Book is not currently reserved");
+    }
+    if (reservedBy != libraryMember) {
+        throw new Error("Book is reserved by someone else");
+    }
+    this.isReserved = false; 
+    this.reservedBy = null;
+    }
 }
-}
+ 
+
+
+
+
+
+
 
