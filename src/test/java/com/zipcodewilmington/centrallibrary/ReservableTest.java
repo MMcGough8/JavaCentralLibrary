@@ -60,4 +60,10 @@ public class ReservableTest {
         assertFalse(item.isReserved());
 
     }
+
+    @Test
+    public void testIsReservedInitially() {
+        MockReservable item = new MockReservable();
+        assertFalse(item.isReserved());
+    }    
 }
