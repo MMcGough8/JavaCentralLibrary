@@ -28,8 +28,6 @@ public abstract class LibraryItem {
     
     public void setLocation(String location) {
         this.location = location;
-    public String getItemType() {
-        return itemType;
     }
     
     public boolean isAvailable() {

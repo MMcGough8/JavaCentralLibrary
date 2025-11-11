@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
  */
 public class MainApplicationTest {
 
-    MainApplication app = new MainApplication();
-
     @Test
     public void shouldAnswerWithTrue() {
         Assertions.assertTrue(true);

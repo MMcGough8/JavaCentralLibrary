@@ -18,16 +18,16 @@ public class ReservableTest {
     // Mock implementation of Reservable
     static class MockReservable implements Reservable {
         private boolean reserved = false;        // asks "is it reserved?"
-        private MockLibraryMember reservedBy = null;    // tracks who reserved it
+        private LibraryMember reservedBy = null;    // tracks who reserved it
         
         @Override
-        public void reserve(MockLibraryMember libraryMember) {
+        public void reserve(LibraryMember libraryMember) {
             this.reserved = true;
             this.reservedBy = libraryMember;
         }
         
         @Override
-        public void cancelReserve(MockLibraryMember libraryMember) {
+        public void cancelReserve(LibraryMember libraryMember) {
             this.reserved = false;   // item is cancelled, so reservation is removed
             this.reservedBy = null;  // reserved by is null because the item is longer reserved
         }
@@ -40,7 +40,7 @@ public class ReservableTest {
     
     @Test
     public void testReserveItem() {
-        MockLibraryMember member = new MockLibraryMember("Ben");
+        LibraryMember member = new LibraryMember();
         MockReservable item = new MockReservable();    // creates an item to reserve
 
         item.reserve(member);  
@@ -50,7 +50,7 @@ public class ReservableTest {
 
     @Test
     public void testCancelReserve() {
-        MockLibraryMember member = new MockLibraryMember("Ben");
+        LibraryMember member = new LibraryMember();
         MockReservable item = new MockReservable();
 
         item.reserve(member);  
