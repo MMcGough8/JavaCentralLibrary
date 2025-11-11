@@ -2,6 +2,7 @@ package com.zipcodewilmington.centrallibrary;
 
 import java.util.List;
 
+
 public interface Searchable {
         List<String> getSearchableFields();
         
