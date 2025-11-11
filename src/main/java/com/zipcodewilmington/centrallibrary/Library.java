@@ -40,6 +40,15 @@ public class Library {
         return false;
     }
 
+public List<LibraryItem> searchItems(String keyword) {
+    List<LibraryItem> results = new ArrayList<>();
+    for (LibraryItem item : items) {
+        if (item.matchesKeyword(keyword)) {
+            results.add(item);
+        }
+    }
+    return results;
+}
     public void displayAllItems() {
         String header = "=== Library Items ===";
         int totalWidth = 60;
