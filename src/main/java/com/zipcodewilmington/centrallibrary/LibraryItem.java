@@ -1,5 +1,6 @@
 package com.zipcodewilmington.centrallibrary;
 
+<<<<<<< HEAD
 public abstract class LibraryItem {
     
     protected String id;
@@ -12,6 +13,20 @@ public abstract class LibraryItem {
         this.title = title;
         this.location = location;
         this.isAvailable = true;
+=======
+// TEMPORARY SUB 
+public class LibraryItem {
+    private String id;
+    private String title;
+    private String itemType;
+    private boolean isAvailable;
+    
+    public LibraryItem(String id, String title, String itemType) {
+        this.id = id;
+        this.title = title;
+        this.itemType = itemType;
+        this.isAvailable = true;  // Default to available
+>>>>>>> origin/marc
     }
     
     public String getId() {
@@ -22,18 +37,24 @@ public abstract class LibraryItem {
         return title;
     }
     
+<<<<<<< HEAD
     public String getLocation() {
         return location;
     }
     
     public void setLocation(String location) {
         this.location = location;
+=======
+    public String getItemType() {
+        return itemType;
+>>>>>>> origin/marc
     }
     
     public boolean isAvailable() {
         return isAvailable;
     }
     
+<<<<<<< HEAD
     public boolean checkOut() {
         if (isAvailable) {
             isAvailable = false;
@@ -86,3 +107,9 @@ public abstract class LibraryItem {
         return id.hashCode();
     }
 }
+=======
+    public void setAvailable(boolean available) {
+        this.isAvailable = available;
+    }
+}
+>>>>>>> origin/marc
