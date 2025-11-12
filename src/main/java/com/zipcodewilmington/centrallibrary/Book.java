@@ -1,5 +1,8 @@
 package com.zipcodewilmington.centrallibrary;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Book extends LibraryItem implements Reservable {
     
     private String isbn;
@@ -48,6 +51,7 @@ public class Book extends LibraryItem implements Reservable {
         if (keyword == null || keyword.trim().isEmpty()) {
             return false; 
     }
+
     String lower = keyword.toLowerCase();
         return getTitle().toLowerCase().contains(lower)
                 || author.toLowerCase().contains(lower)
@@ -57,26 +61,36 @@ public class Book extends LibraryItem implements Reservable {
 
     public boolean isReserved() {
         return isReserved;
-        } 
+    } 
 
     public void reserve(LibraryMember libraryMember) {
-    if (isReserved) { 
-        throw new Error("Book is already reserved");
-    } else {
-        this.isReserved = true;  // 
-        this.reservedBy = libraryMember; 
-    }
+        if (isReserved) { 
+            throw new Error("Book is already reserved");
+        } else {
+            this.isReserved = true;  // 
+            this.reservedBy = libraryMember; 
+        }
     }
 
     public void cancelReserve(LibraryMember libraryMember) {
-    if (!isReserved) {
-        throw new Error("Book is not currently reserved");
+        if (!isReserved) {
+            throw new Error("Book is not currently reserved");
+        }
+        if (reservedBy != libraryMember) {
+            throw new Error("Book is reserved by someone else");
+        }
+        this.isReserved = false; 
+        this.reservedBy = null;
     }
-    if (reservedBy != libraryMember) {
-        throw new Error("Book is reserved by someone else");
-    }
-    this.isReserved = false; 
-    this.reservedBy = null;
+
+    @Override
+    public List<String> getSearchableFields() {
+        List<String> fields = new ArrayList<>();
+        fields.add(this.title);
+        fields.add(this.author);
+        fields.add(this.isbn);
+        fields.add(this.genre);
+        return fields;
     }
 }
  
