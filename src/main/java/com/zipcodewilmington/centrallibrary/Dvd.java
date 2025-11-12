@@ -28,23 +28,23 @@ public class Dvd extends LibraryItem implements Reservable {
 
     // Getters
     public String getDirector() {
-        return director;
+        return this.director;
     }
 
     public int getDuration() {
-        return duration;
+        return this.duration;
     }
 
     public String getRating() {
-        return rating;
+        return this.rating;
     }
 
     public String getGenre() {
-        return genre;
+        return this.genre;
     }
 
     public boolean isReserved() {
-        return isReserved;
+        return this.isReserved;
     }
 
     // Setters
@@ -82,22 +82,22 @@ public class Dvd extends LibraryItem implements Reservable {
     @Override
     public List<String> getSearchableFields() {
         List<String> fields = new ArrayList<>();
-        fields.add(getTitle());
-        fields.add(director);
-        fields.add(genre);
+        fields.add(this.title);
+        fields.add(this.director);
+        fields.add(this.genre);
         return fields;
     }
 
     @Override
     public void reserve(LibraryMember member) {
-        if (!isReserved) {
-            isReserved = true;
+        if (!this.isReserved) {
+            this.isReserved = true;
         }
     }
 
     @Override
     public void cancelReserve(LibraryMember member) {
-        isReserved = false;
+        this.isReserved = false;
     }
 
     @Override

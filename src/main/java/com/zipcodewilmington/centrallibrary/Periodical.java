@@ -1,6 +1,9 @@
 package com.zipcodewilmington.centrallibrary;
 
-public class Periodical extends LibraryItem {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Periodical extends LibraryItem implements Reservable{
     
    
     private String issueDate;
@@ -9,6 +12,7 @@ public class Periodical extends LibraryItem {
     private int volume; 
 	private int issueNumber; 
 	private String publicationDate; 
+    boolean isReserved;
     
  
     public Periodical(String id, String title, String location, String issueDate, String issn, int volume, int issueNumber, String publisher, String publicationDate) {
@@ -60,14 +64,27 @@ public class Periodical extends LibraryItem {
         return issueNumber;
     }
 
-    public boolean matchesKeyword(String keyword) {
-    if (keyword == null || keyword.trim().isEmpty()) {
-        return false; 
+    @Override
+    public List<String> getSearchableFields() {
+        List<String> fields = new ArrayList<>();
+        fields.add(this.title);
+        fields.add(this.publisher);
+        fields.add(this.issn);
+        return fields;
     }
-    
-    String lower = keyword.toLowerCase();
-    return getTitle().toLowerCase().contains(lower)
-            || publisher.toLowerCase().contains(lower)
-            || issn.toLowerCase().contains(lower);
-}
+
+    @Override
+    public void reserve(LibraryMember libraryMember) {
+        this.isReserved = true;
+    }
+
+    @Override
+    public void cancelReserve(LibraryMember libraryMember) {
+        this.isReserved = false;
+    }
+
+    @Override
+    public boolean isReserved() {
+        return this.isReserved;
+    }
 }
