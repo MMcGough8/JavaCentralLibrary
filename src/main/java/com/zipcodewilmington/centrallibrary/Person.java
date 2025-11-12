@@ -2,12 +2,12 @@ package com.zipcodewilmington.centrallibrary;
 
 public class Person {
 
-    private String name;                // created with private fields to prevent access from outside the class
-    private int age;
-    private String email;
-    private String phoneNumber;
+    protected String name;                // created with private fields to prevent access from outside the class
+    protected int age;
+    protected String email;
+    protected String phoneNumber;
     
-    public Person(String name, int age, String email, String phoneNumber) {         // constructor with necessary fields
+    public Person(String name, int age, String email, int phoneNumber) {         // constructor with necessary fields
         setName(name);                                                              // using constructor call setter methods
         setAge(age);                                                                // allows for validation checks (no negative ages, invalid phone numbers etc.)
         setEmail(email);                                

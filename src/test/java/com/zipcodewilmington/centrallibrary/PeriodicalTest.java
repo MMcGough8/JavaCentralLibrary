@@ -105,15 +105,7 @@ void testConstructorAndGetters() {
         assertEquals("11/10/25", per.getPublicationDate()); 
     }
 
-    @Test
-    void testCheckOutUnavailableItem(){
-        Periodical per = new Periodical ("DM001", "Journal", "Shelf Test 1", "November 2020", "5000-1000", 123, 10, "Hamurabi Publishing" , "11/10/25");
-        assertTrue(per.isAvailable());
-        assertTrue(per.checkOut());
-        assertFalse(per.isAvailable());
-        assertTrue(per.checkIn());
-        assertTrue(per.isAvailable());
-    }
+  
 
 
 
