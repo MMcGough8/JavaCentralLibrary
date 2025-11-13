@@ -58,17 +58,19 @@ public abstract class LibraryItem implements Searchable {
     /**
      * Check out an item (makes it unavailable)
      */
-    public void checkOut() {
-        if (isAvailable) {
-            isAvailable = false;
+    public boolean checkOut() {
+        if (this.isAvailable) {
+            this.isAvailable = false;
         }
+        return this.isAvailable;
     }
     
     /**
      * Check in an item (makes it available)
      */
-    public void checkIn() {
-        isAvailable = true;
+    public boolean checkIn() {
+        this.isAvailable = true;
+        return this.isAvailable;
     }
     
     /**
