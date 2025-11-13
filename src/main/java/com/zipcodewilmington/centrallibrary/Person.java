@@ -2,16 +2,16 @@ package com.zipcodewilmington.centrallibrary;
 
 public class Person {
 
-    private String name;                // created with private fields to prevent access from outside the class
-    private int age;
-    private String email;
-    private String phoneNumber;
+    protected String name;                // created with private fields to prevent access from outside the class
+    protected int age;
+    protected String email;
+    protected int phoneNumber;
     
-    public Person(String name, int age, String email, String phoneNumber) {         // constructor with necessary fields
-        setName(name);                                                              // using constructor call setter methods
-        setAge(age);                                                                // allows for validation checks (no negative ages, invalid phone numbers etc.)
-        setEmail(email);                                
-        setPhoneNumber(phoneNumber);                    
+    public Person(String name, int age, String email, int phoneNumber) {         // constructor with necessary fields
+        this.name = name;                                                              // using constructor call setter methods
+        this.age = age;                                                                // allows for validation checks (no negative ages, invalid phone numbers etc.)
+        this.email = email;                                
+        this.phoneNumber = phoneNumber;                 
     }
 
     public String getName() {               // these are the getters: provide READ access to each private field
@@ -26,7 +26,7 @@ public class Person {
         return email;
     }
 
-    public String getPhoneNumber() {
+    public  int getPhoneNumber() {
         return phoneNumber;
     }                                      // end of getters
 
