@@ -12,7 +12,7 @@ public class LibraryMember extends Person {
     private double outstandingFees;
     private Address address;
     
-    public LibraryMember(String name, int age, String email, String phoneNumber, 
+    public LibraryMember(String name, int age, String email, int phoneNumber, 
                         String memberId, Date membershipDate, Address address) {
         super(name, age, email, phoneNumber);
         setMemberId(memberId);
