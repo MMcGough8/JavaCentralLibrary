@@ -1,5 +1,5 @@
 package com.zipcodewilmington.centrallibrary;
 
-class Main {
-
+public class BookTest {
+    
 }

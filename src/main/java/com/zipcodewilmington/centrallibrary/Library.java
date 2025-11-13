@@ -8,14 +8,16 @@ public class Library {
     private String name;
     private Address address;
     private List<LibraryItem> items; 
-    private List<LibraryMember> librarymember;
+    private List<Librarian> librarians;
+    private List<LibraryMember> libraryMembers;
 
     //Constructor to initialize a new library with a name and address
     public Library(String name, Address address) {
         this.name = name;
         this.address = address;
         this.items = new ArrayList<>();
-        this.librarymember = new ArrayList<>();
+        this.librarians = new ArrayList<>();
+        this.libraryMembers = new ArrayList<>();
     }
 
     // Start of getter methods
@@ -31,9 +33,25 @@ public class Library {
         return items;
     }
 
+    public List<Librarian> getLibrarians() {
+        return librarians;
+    }
+
+    public List<LibraryMember> getLibraryMembers() {
+        return libraryMembers;
+    }
+
     //Method to add a new item to the library's collection
     public void addItem(LibraryItem item) {
         items.add(item);
+    }
+
+    public void addLibrarian(Librarian librarian) {
+        librarians.add(librarian);
+    }
+
+    public void addLibraryMember(LibraryMember member) {
+        libraryMembers.add(member);
     }
 
     // Metho to remove an item from the library by its ID 
@@ -48,16 +66,56 @@ public class Library {
         return false;
     }
 
-public List<LibraryItem> searchItems(String keyword) {
-    List<LibraryItem> results = new ArrayList<>();
-    for (LibraryItem item : items) {
-        if (item.matchesKeyword(keyword)) {
-            results.add(item);
+    public boolean removeLibrarian(int employeeId) {
+        for (int i = 0; i < librarians.size(); i++) {
+            if (librarians.get(i).getEmployeeId() == employeeId) {
+                librarians.remove(i);
+                return true;
+            }
         }
+        return false;
     }
-    return results;
-}
 
+    public boolean removeLibraryMember(int memberId) {
+        for (int i = 0; i < libraryMembers.size(); i++) {
+            if (libraryMembers.get(i).getMemberId() == memberId) {
+                libraryMembers.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Librarian findLibrarian(int employeeId) {
+        for (Librarian librarian : librarians) {
+            if (librarian.getEmployeeId() == employeeId) {
+                return librarian;
+            }
+        }
+        return null;
+    }
+
+    public LibraryMember findLibraryMember(int memberId) {
+        for (LibraryMember member : libraryMembers) {
+            if (member.getMemberId() == memberId) {
+                return member;
+            }
+        }
+        return null;
+    }
+
+
+    public List<LibraryItem> searchItems(String keyword) {
+        List<LibraryItem> results = new ArrayList<>();
+            for (LibraryItem item : items) {
+                if (item.matchesKeyword(keyword)) {
+                    results.add(item);
+                }
+            }
+            return results;
+    }
+
+    
     //Method to display all items in the library.
     public void displayAllItems() {
         String header = "=== Library Items ===";
@@ -73,4 +131,31 @@ public List<LibraryItem> searchItems(String keyword) {
         }
         System.out.println("Total items: " + items.size());
         }
+        
+    public void generateLateFeeReport() {
+        String header = "=== Late Fee Report ===";
+        int totalWidth = 80;
+        int padding = (totalWidth - header.length()) / 2;
+        System.out.println(" ".repeat(padding) + header);
+        System.out.println("--------------------------------------------------------------------------------");
+
+        for (LibraryMember member : libraryMembers) {
+            System.out.println("\nMember: " + member.getName());
+            List<LibraryItem> borrowed = member.getBorrowedItems();
+
+                if (borrowed.isEmpty()) {
+                    System.out.println("  No borrowed items");
+                } else {
+                    System.out.printf("  %-30s %-20s %-15s%n", "Title", "Max Borrow Days", "Late Fee");
+                    System.out.println("  ----------------------------------------------------------------------");
+
+                for (LibraryItem item : borrowed) {
+                    int daysOverdue = 0;
+                    double lateFee = item.calculateLateFee(daysOverdue);
+                    System.out.printf("  %-30s %-20d $%-14.2f%n", item.getTitle(), item.getMaxBorrowDays(), lateFee);
+                }
+            }
+        }
+        System.out.println("--------------------------------------------------------------------------------");
+    }
 }
