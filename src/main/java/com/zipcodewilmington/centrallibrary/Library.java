@@ -130,5 +130,32 @@ public class Library {
             System.out.printf("%-15s %-30s %-15s%n", item.getItemType(), item.getTitle(), availability);
         }
         System.out.println("Total items: " + items.size());
-        }   
+        }
+        
+    public void generateLateFeeReport() {
+        String header = "=== Late Fee Report ===";
+        int totalWidth = 80;
+        int padding = (totalWidth - header.length()) / 2;
+        System.out.println(" ".repeat(padding) + header);
+        System.out.println("--------------------------------------------------------------------------------");
+
+        for (LibraryMember member : libraryMembers) {
+            System.out.println("\nMember: " + member.getName());
+            List<LibraryItem> borrowed = member.getBorrowedItems();
+
+                if (borrowed.isEmpty()) {
+                    System.out.println("  No borrowed items");
+                } else {
+                    System.out.printf("  %-30s %-20s %-15s%n", "Title", "Max Borrow Days", "Late Fee");
+                    System.out.println("  ----------------------------------------------------------------------");
+
+                for (LibraryItem item : borrowed) {
+                    int daysOverdue = 0;
+                    double lateFee = item.calculateLateFee(daysOverdue);
+                    System.out.printf("  %-30s %-20d $%-14.2f%n", item.getTitle(), item.getMaxBorrowDays(), lateFee);
+                }
+            }
+        }
+        System.out.println("--------------------------------------------------------------------------------");
+    }
 }
