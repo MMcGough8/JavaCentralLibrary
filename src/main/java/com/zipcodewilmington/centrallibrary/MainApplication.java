@@ -3,6 +3,8 @@ package com.zipcodewilmington.centrallibrary;
 import java.util.List;
 import java.util.Scanner;
 
+import java.util.List.*;
+
 public class MainApplication {
 
     private static Library centralLibrary;
@@ -17,12 +19,12 @@ public class MainApplication {
         loginMenu();
 
         System.out.println("📚 Thank you for using Central Library! 📚");
-
     }
     
     public static void loginMenu() {
         while (true) {
             System.out.println("\n============= LOGIN MENU ===============");
+            System.out.println("PLEASE PICK THE COORESPONDING OPTION NUMBER");
             System.out.println("1. Member Login");
             System.out.println("2. Librarian Login");
             System.out.println("3. Quit Program");
@@ -82,15 +84,26 @@ public class MainApplication {
             return null;
     }
 
-    
-
     private static void initializeLibrarySystem() {
     }
 
+    private static void displaySystemStatus() {
+        System.out.println("\n:bar_chart: SYSTEM STATUS:");
+        System.out.println("Library: " + centralLibrary.getName());
+        Address addr = centralLibrary.getAddress();
+        System.out.printf("Address: %s, %s, %s %d%n",
+                         addr.getStreetName(), addr.getCity(), addr.getState(), addr.getZipCode());
+        System.out.println(":books: Items: " + centralLibrary.getItems().size());
+        System.out.println(":busts_in_silhouette: Members: " + centralLibrary.getLibraryMembers().size());
+        System.out.println(":male-office-worker: Librarians: " + centralLibrary.getLibrarians().size());
+        System.out.println();
+    }
 
     private static void runMainApplication() {
         while (true) {
             showMainMenu();
+            List<Book> books = new List<>();
+
             int choice = getIntInput("Choose option (1-6): ");
             
             switch (choice) {
@@ -232,7 +245,6 @@ public class MainApplication {
         System.out.println();
     }
     
-
     private static void itemManagement() {
         System.out.println("\n📚 ITEM MANAGEMENT:");
         System.out.println("1. View All Items");
@@ -255,7 +267,6 @@ public class MainApplication {
                 break;
         }
     }
-    
 
     private static void viewAllMembers() {
         System.out.println("\n👥 ALL LIBRARY MEMBERS:");
@@ -267,7 +278,6 @@ public class MainApplication {
         }
         System.out.println();
     }
-    
 
     private static void searchLibrary() {
         System.out.print("\n🔍 Enter search keyword: ");
@@ -289,7 +299,6 @@ public class MainApplication {
         }
         System.out.println();
     }
-    
 
     private static void displayItemsWithIds() {
         System.out.println("📚 AVAILABLE LIBRARY ITEMS:");

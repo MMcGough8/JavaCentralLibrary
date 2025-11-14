@@ -80,15 +80,62 @@
       "publicationDate": "06/01/1985"
     }
   ],
+
+
   "movies": [
     {
       "id": "D001",
-      "title": "The Matrix",
+      "genre": "Sci-Fi",
       "location": "D1",
       "director": "Wachowski Sisters",
       "duration": "136",
-      "rating": "R",
-      "genre": "Sci-Fi"
+      "title": "The Matrix",
+      "vote_average": 8.1
+    },
+
+    {
+      "id": "D002",
+      "genre": "[{'id': 16, 'name': 'Animation'}, {'id': 35, 'name': 'Comedy'}, {'id': 10751, 'name': 'Family'}]",
+      "location": "D2",
+      "duration": 81.0,
+      "title": "Toy Story",
+      "vote_average": 7.7
+    },
+
+    {
+      "id": "D003",
+      "genre": "[{'id': 12, 'name': 'Adventure'}, {'id': 14, 'name': 'Fantasy'}, {'id': 10751, 'name': 'Family'}]",
+      "location": "D3",
+      "duration": 104.0,
+      "title": "Jumanji",
+      "vote_average": 6.9
+    },
+
+    {
+      "id": "D004",
+      "genre": "[{'id': 10749, 'name': 'Romance'}, {'id': 35, 'name': 'Comedy'}]",
+      "location": "D4",
+      "duration": 101.0,
+      "title": "Grumpier Old Men",
+      "vote_average": 6.5
+    },
+
+    {
+      "id": "D005",
+      "genre": "[{'id': 35, 'name': 'Comedy'}, {'id': 18, 'name': 'Drama'}, {'id': 10749, 'name': 'Romance'}]",
+      "location": "D5",
+      "duration": 127.0,
+      "title": "Waiting to Exhale",
+      "vote_average": 6.1
+    },
+
+    {
+      "id": "D006",
+      "genre": "[{'id': 35, 'name': 'Comedy'}]",
+      "location": "D6",
+      "duration": 106.0,
+      "title": "Father of the Bride Part II",
+      "vote_average": 5.7
     }
   ]
 }
