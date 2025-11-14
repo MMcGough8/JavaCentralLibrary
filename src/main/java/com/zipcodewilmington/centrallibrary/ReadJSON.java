@@ -76,16 +76,16 @@ public class ReadJSON {
             System.out.println("=== PERIODICALS ===");
             JSONArray periodicals = (JSONArray) jsonObject.get("periodicals");
             for (Object obj : periodicals) {
-                JSONObject p = (JSONObject) obj;
+                JSONObject periodical = (JSONObject) obj;
 
-                System.out.println("ID: " + p.get("id"));
-                System.out.println("Title: " + p.get("title"));
-                System.out.println("Location: " + p.get("location"));
-                System.out.println("Publisher: " + p.get("publisher"));
-                System.out.println("ISSN: " + p.get("issn"));
-                System.out.println("Volume: " + p.get("volume"));
-                System.out.println("Issue Number: " + p.get("issueNumber"));
-                System.out.println("Publication Date: " + p.get("publicationDate"));
+                System.out.println("ID: " + periodical.get("id"));
+                System.out.println("Title: " + periodical.get("title"));
+                System.out.println("Location: " + periodical.get("location"));
+                System.out.println("Publisher: " + periodical.get("publisher"));
+                System.out.println("ISSN: " + periodical.get("issn"));
+                System.out.println("Volume: " + periodical.get("volume"));
+                System.out.println("Issue Number: " + periodical.get("issueNumber"));
+                System.out.println("Publication Date: " + periodical.get("publicationDate"));
                 System.out.println();
             }
 
