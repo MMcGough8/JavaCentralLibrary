@@ -4,13 +4,25 @@ import java.util.List;
 import java.util.Scanner;
 
 public class MainApplication {
-    
+
     private static Library centralLibrary;
     private static Scanner scanner = new Scanner(System.in);
 
+    public static void main(String[] args) {
+        System.out.println("---------------------------------------------------------------------------------------");
+        System.out.println();
+        System.out.println("🏛️ === Welcome to the Central Library System! === 🏛️");
+        System.out.println();
+
+        loginMenu();
+
+        System.out.println("📚 Thank you for using Central Library! 📚");
+
+    }
+    
     public static void loginMenu() {
         while (true) {
-            System.out.println("\n=== LOGIN MENU ====");
+            System.out.println("\n============= LOGIN MENU ===============");
             System.out.println("1. Member Login");
             System.out.println("2. Librarian Login");
             System.out.println("3. Quit Program");
@@ -43,7 +55,6 @@ public class MainApplication {
         }
     }
 
-
     private static LibraryMember memberLogin() {
         System.out.print("\nEnter Member ID: ");
         String memberId = scanner.nextLine().trim();
@@ -53,52 +64,30 @@ public class MainApplication {
                 return member;
             }
         }
+
         System.out.println("Member ID not found. Try again.\n");
         return null;   
     }
 
-        private static Librarian librarianLogin() {
-            System.out.print("\nEnter Librarian Employee ID: ");
-            String employeeId = scanner.nextLine().trim();
+    private static Librarian librarianLogin() {
+        System.out.print("\nEnter Librarian Employee ID: ");
+        String employeeId = scanner.nextLine().trim();
 
-            for (Librarian librarian : centralLibrary.getLibrarians()) {
-                if (librarian.getEmployeeId().equalsIgnoreCase(employeeId)) {
-                    return librarian;
-                }   
-            }
-            System.out.println("Employee ID not found. Try again.\n");
-                return null;
+        for (Librarian librarian : centralLibrary.getLibrarians()) {
+             if (librarian.getEmployeeId().equalsIgnoreCase(employeeId)) {
+                return librarian;
+            }   
+        }
+        System.out.println("Employee ID not found. Try again.\n");
+            return null;
     }
 
-
-
-
-    public static void main(String[] args) {
-        System.out.println("===============================================================================");
-        System.out.println("🏛️ === Welcome to the Central Library System! === 🏛️");
-        System.out.println();
-
-        loginMenu();
-
-        scanner.close();
-        System.out.println("📚 Thank you for using Central Library! 📚");
-    }
     
+
     private static void initializeLibrarySystem() {
     }
-    
-    private static void displaySystemStatus() {
-        System.out.println("\n📊 SYSTEM STATUS:");
-        System.out.println("Library: " + centralLibrary.getName());
-        Address addr = centralLibrary.getAddress();
-        System.out.printf("Address: %s, %s, %s %d%n", 
-                         addr.getStreetName(), addr.getCity(), addr.getState(), addr.getZipCode());
-        System.out.println("📚 Items: " + centralLibrary.getItems().size());
-        System.out.println("👥 Members: " + centralLibrary.getLibraryMembers().size());
-        System.out.println("👨‍💼 Librarians: " + centralLibrary.getLibrarians().size());
-        System.out.println();
-    }
-    
+
+
     private static void runMainApplication() {
         while (true) {
             showMainMenu();
