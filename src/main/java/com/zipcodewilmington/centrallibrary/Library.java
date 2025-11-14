@@ -97,7 +97,7 @@ public class Library {
 
     public LibraryMember findLibraryMember(String memberId) {
         for (LibraryMember member : libraryMembers) {
-            if (member.getMemberId() == memberId) {
+            if (member.getMemberId().equals(memberId)) {
                 return member;
             }
         }
