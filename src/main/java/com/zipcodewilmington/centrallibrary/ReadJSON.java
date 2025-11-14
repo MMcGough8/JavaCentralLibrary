@@ -16,14 +16,12 @@ public class ReadJSON {
             JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("file.json"));
 
 
-
             String libraryName = (String) jsonObject.get("libraryName");
             String address = (String) jsonObject.get("address");
 
             System.out.println("Library Name: " + libraryName);
             System.out.println("Address: " + address);
             System.out.println();
-
 
 
             System.out.println("=== LIBRARIANS ===");
