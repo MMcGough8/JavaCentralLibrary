@@ -470,19 +470,4 @@ public class MainApplication {
             }
         }
     }
-
-    private static boolean isDuplicateBook(Book newBook) {
-    for (LibraryItem item : centralLibrary.getItems()) {
-        if (item instanceof Book oldBook) {
-            if (oldBook.getIsbn().equalsIgnoreCase(newBook.getIsbn())) {
-                return true;
-            }
-            if (oldBook.getTitle().equalsIgnoreCase(newBook.getTitle()) &&
-                oldBook.getAuthor().equalsIgnoreCase(newBook.getAuthor())) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
 }
