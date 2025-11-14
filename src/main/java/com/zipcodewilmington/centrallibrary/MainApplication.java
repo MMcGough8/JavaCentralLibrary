@@ -2,7 +2,6 @@ package com.zipcodewilmington.centrallibrary;
 
 import java.util.List;
 import java.util.Scanner;
-
 import java.util.List.*;
 
 public class MainApplication {
@@ -16,10 +15,11 @@ public class MainApplication {
         System.out.println("🏛️ === Welcome to the Central Library System! === 🏛️");
         System.out.println();
 
+        initializeLibrarySystem(); 
         loginMenu();
 
         System.out.println("📚 Thank you for using Central Library! 📚");
-    }
+    }  
     
     public static void loginMenu() {
         while (true) {
@@ -85,6 +85,18 @@ public class MainApplication {
     }
 
     private static void initializeLibrarySystem() {
+
+    List<Book> jsonBooks = reader.readBooksFromJson("file.json");
+
+    for (Book book : jsonBooks) {
+        if (!isDuplicateBook(book)) {
+            centralLibrary.addItem(book);
+        }
+    }
+
+    System.out.println("Book list initialized from JSON" 
+        + centralLibrary.getItems().size() + " items loaded");
+
     }
 
     private static void displaySystemStatus() {
@@ -333,4 +345,19 @@ public class MainApplication {
             }
         }
     }
+
+private static boolean isDuplicateBook(Book newBook) {
+    for (LibraryItem item : centralLibrary.getItems()) {
+        if (item instanceof Book oldBook) {
+            if (oldBook.getIsbn().equalsIgnoreCase(newBook.getIsbn())) {
+                return true;
+            }
+            if (oldBook.getTitle().equalsIgnoreCase(newBook.getTitle()) &&
+                oldBook.getAuthor().equalsIgnoreCase(newBook.getAuthor())) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 }
