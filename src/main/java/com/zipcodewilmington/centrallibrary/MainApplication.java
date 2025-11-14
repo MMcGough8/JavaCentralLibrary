@@ -208,11 +208,6 @@ public class MainApplication {
         }
     }
 
-
-
-
-    List<Book> jsonBooks = reader.readBooksFromJson("file.json");
-
     for (Book book : jsonBooks) {
         if (!isDuplicateBook(book)) {
             centralLibrary.addItem(book);
