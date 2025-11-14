@@ -177,6 +177,22 @@ public class MainApplication {
         System.out.println("Borrowed Items: " + member.getBorrowedItems().size());
         System.out.println();
     }
+
+    private static void borrowItem(LibraryMember member) {
+
+    }
+
+    private static void returnItem(LibraryMember member) {
+
+    }
+
+    private static void showBorrowedItems(LibraryMember member) {
+
+    }
+
+    private static void payFees(LibraryMember member) {
+        
+    }
     
 
     private static void itemManagement() {
