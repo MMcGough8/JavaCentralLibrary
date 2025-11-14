@@ -1,7 +1,13 @@
 package com.zipcodewilmington.centrallibrary;
 
+import java.io.FileReader;
 import java.util.List;
 import java.util.Scanner;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import java.util.List.*;
 
 public class MainApplication {
@@ -14,7 +20,7 @@ public class MainApplication {
         System.out.println();
         System.out.println("🏛️ === Welcome to the Central Library System! === 🏛️");
         System.out.println();
-
+        initializeLibrarySystem();
         initializeLibrarySystem(); 
         loginMenu();
 
@@ -85,6 +91,125 @@ public class MainApplication {
     }
 
     private static void initializeLibrarySystem() {
+        JSONParser parser = new JSONParser();
+        
+        try {
+            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("file.json"));
+
+            String libraryName = (String) jsonObject.get("libraryName");
+            String addressStr = (String) jsonObject.get("address");
+            String[] partsA = addressStr.split(",");
+            Address address = new Address(partsA[0].trim(), partsA[1].trim(), partsA[2].trim(), Integer.parseInt(partsA[3].trim()));
+
+            centralLibrary = new Library(libraryName, address);
+
+            JSONArray librarians = (JSONArray) jsonObject.get("librarians");
+            for (Object obj : librarians) {
+                JSONObject librarianJson = (JSONObject) obj;
+    
+                Librarian librarian = new Librarian(
+                    (String) librarianJson.get("name"),            
+                    ((Long) librarianJson.get("age")).intValue(),    
+                    (String) librarianJson.get("email"),             
+                    ((Long) librarianJson.get("phonenumber")).intValue(), 
+                    (String) librarianJson.get("employeeId"),        
+                    (String) librarianJson.get("department"),        
+                    ((Long) librarianJson.get("salary")).intValue());
+            
+                centralLibrary.addLibrarian(librarian);
+            }
+
+            JSONArray members = (JSONArray) jsonObject.get("members");
+            for (Object obj : members) {
+                JSONObject memberJson = (JSONObject) obj;
+    
+            String memberAddressStr = (String) memberJson.get("address");
+            Address memberAddress;
+            if (memberAddressStr != null && !memberAddressStr.isEmpty()) {
+                String[] parts = memberAddressStr.split(",");
+                if (parts.length >= 4) {
+                    memberAddress = new Address(
+                        parts[0].trim(), 
+                        parts[1].trim(), 
+                        parts[2].trim(), 
+                        Integer.parseInt(parts[3].trim()));
+                } else {
+                    memberAddress = new Address("Unknown", "Unknown", "UN", 0);
+                }
+            } else {
+                memberAddress = new Address("Unknown", "Unknown", "UN", 0);
+            }
+
+            Date membershipDate = new Date();
+
+            LibraryMember member = new LibraryMember(
+                (String) memberJson.get("name"),
+                ((Long) memberJson.get("age")).intValue(),
+                (String) memberJson.get("email"),
+                ((Long) memberJson.get("phonenumber")).intValue(),
+                (String) memberJson.get("memberId"),
+                membershipDate,
+                memberAddress);
+    
+            centralLibrary.addLibraryMember(member);
+        }
+
+            JSONArray books = (JSONArray) jsonObject.get("books");
+            for (Object obj : books) {
+                JSONObject bookJson = (JSONObject) obj;
+    
+                Book book = new Book(
+                    (String) bookJson.get("author"),
+                    (String) bookJson.get("title"),
+                    (String) bookJson.get("isbn"),
+                    (String) bookJson.get("genre"),      
+                    ((Long) bookJson.get("pages")).intValue());
+    
+            centralLibrary.addItem(book);
+        }
+
+            JSONArray periodicals = (JSONArray) jsonObject.get("periodicals");
+            for (Object obj : periodicals) {
+                JSONObject periodicalJson = (JSONObject) obj;
+    
+                Periodical periodical = new Periodical(
+                    (String) periodicalJson.get("id"),                  
+                    (String) periodicalJson.get("title"),              
+                    (String) periodicalJson.get("location"),          
+                    (String) periodicalJson.get("issueDate"),            
+                    (String) periodicalJson.get("issn"),                  
+                    ((Long) periodicalJson.get("volume")).intValue(),  
+                    ((Long) periodicalJson.get("issueNumber")).intValue(),
+                    (String) periodicalJson.get("publisher"),
+                    (String) periodicalJson.get("publicationDate"));
+    
+            centralLibrary.addItem(periodical);
+        }
+
+            JSONArray movies = (JSONArray) jsonObject.get("movies");
+            for (Object obj : movies) {
+                JSONObject movieJson = (JSONObject) obj;
+    
+                Dvd dvd = new Dvd(
+                    (String) movieJson.get("id"),
+                    (String) movieJson.get("title"),
+                    (String) movieJson.get("location"),
+                    (String) movieJson.get("director"),
+                    ((Long) movieJson.get("duration")).intValue(),
+                    (String) movieJson.get("rating"),
+                    (String) movieJson.get("genre"));
+    
+            centralLibrary.addItem(dvd);
+        }
+        } catch (Exception e) {
+            centralLibrary = new Library(
+      "Central Library",
+            new Address("123 Main St", "Alexandra", "DE", 19801));
+        }
+    }
+
+
+
 
     List<Book> jsonBooks = reader.readBooksFromJson("file.json");
 
