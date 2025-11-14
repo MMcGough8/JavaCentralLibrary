@@ -54,15 +54,4 @@ public class Person {
         }
         this.email = email.trim();
     }
-
-    public void setPhoneNumber(String phoneNumber) {
-        if (phoneNumber == null || phoneNumber.trim().isEmpty()) {                      // if phone number is null or empty, throw an error
-            throw new Error("Phone number cannot be null or empty");
-        }
-        String digitsOnly = phoneNumber.replaceAll("[^0-9]", "");   // replace all the non-digits with empty space
-        if (digitsOnly.length() < 7 || digitsOnly.length() > 15) {                      // number must be between 7 and 15 digits
-            throw new Error("Phone number must contain 7-15 digits");
-        }
-        this.phoneNumber = phoneNumber.trim();                                          // using .trim in all the string setters to get rid of any accidental blank spaces from user input
-    }                                                   // end of setters
 }

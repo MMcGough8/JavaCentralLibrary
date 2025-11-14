@@ -4,13 +4,13 @@ import java.util.List;
 
 public class Librarian extends Person {
 
-    private int employeeId;
+    private String employeeId;
     private String department;
     private int salary;
     private List<LibraryItem> items;
     
     
-    public Librarian(String name, int age, String email, int phoneNumber, int employeeId, String department, int salary) {         
+    public Librarian(String name, int age, String email, int phoneNumber, String employeeId, String department, int salary) {         
         super(name, age, email, phoneNumber);
         this.employeeId = employeeId;
         this.department = department;
@@ -18,7 +18,7 @@ public class Librarian extends Person {
                                                   
     }
 
-      public int getEmployeeId() {               
+      public String getEmployeeId() {               
         return employeeId;
     }
 
@@ -30,7 +30,7 @@ public class Librarian extends Person {
         return salary;
     }
 
-    public void setEmployeeId(int employeeId) {                      
+    public void setEmployeeId(String employeeId) {                      
         
         this.employeeId = employeeId;
     }

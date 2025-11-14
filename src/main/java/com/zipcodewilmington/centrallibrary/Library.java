@@ -66,9 +66,9 @@ public class Library {
         return false;
     }
 
-    public boolean removeLibrarian(int employeeId) {
+    public boolean removeLibrarian(String employeeId) {
         for (int i = 0; i < librarians.size(); i++) {
-            if (librarians.get(i).getEmployeeId() == employeeId) {
+            if (librarians.get(i).getEmployeeId().equals(employeeId)) {
                 librarians.remove(i);
                 return true;
             }
@@ -76,9 +76,9 @@ public class Library {
         return false;
     }
 
-    public boolean removeLibraryMember(int memberId) {
+    public boolean removeLibraryMember(String memberId) {
         for (int i = 0; i < libraryMembers.size(); i++) {
-            if (libraryMembers.get(i).getMemberId() == memberId) {
+            if (libraryMembers.get(i).getMemberId().equals (memberId)) {
                 libraryMembers.remove(i);
                 return true;
             }
@@ -86,18 +86,18 @@ public class Library {
         return false;
     }
 
-    public Librarian findLibrarian(int employeeId) {
+    public Librarian findLibrarian(String employeeId) {
         for (Librarian librarian : librarians) {
-            if (librarian.getEmployeeId() == employeeId) {
+            if (librarian.getEmployeeId().equals (employeeId)) {
                 return librarian;
             }
         }
         return null;
     }
 
-    public LibraryMember findLibraryMember(int memberId) {
+    public LibraryMember findLibraryMember(String memberId) {
         for (LibraryMember member : libraryMembers) {
-            if (member.getMemberId() == memberId) {
+            if (member.getMemberId().equals(memberId)) {
                 return member;
             }
         }
