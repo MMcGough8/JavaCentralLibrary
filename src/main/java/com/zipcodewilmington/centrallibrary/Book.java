@@ -91,6 +91,6 @@ public class Book extends LibraryItem implements Reservable {
         fields.add(this.isbn);
         fields.add(this.genre);
         return fields;
-    }
+    } 
 }
  

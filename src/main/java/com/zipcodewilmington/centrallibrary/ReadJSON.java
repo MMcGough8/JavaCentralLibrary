@@ -2,6 +2,8 @@ package com.zipcodewilmington.centrallibrary;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -16,14 +18,12 @@ public class ReadJSON {
             JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("file.json"));
 
 
-
             String libraryName = (String) jsonObject.get("libraryName");
             String address = (String) jsonObject.get("address");
 
             System.out.println("Library Name: " + libraryName);
             System.out.println("Address: " + address);
             System.out.println();
-
 
 
             System.out.println("=== LIBRARIANS ===");
@@ -105,7 +105,10 @@ public class ReadJSON {
                 System.out.println();
             }
 
-        } catch (IOException | ParseException e) {
+        } 
+        
+        
+        catch (IOException | ParseException e) {
             e.printStackTrace();
         }
     }

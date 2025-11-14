@@ -1,30 +1,95 @@
 package com.zipcodewilmington.centrallibrary;
 
 import java.io.FileReader;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import java.util.List.*;
 
 
 public class MainApplication {
-    
+
     private static Library centralLibrary;
     private static Scanner scanner = new Scanner(System.in);
-    
+
     public static void main(String[] args) {
-        System.out.println("🏛️ === CENTRAL LIBRARY MANAGEMENT SYSTEM === 🏛️");
+        System.out.println("---------------------------------------------------------------------------------------");
+        System.out.println();
+        System.out.println("🏛️ === Welcome to the Central Library System! === 🏛️");
         System.out.println();
         initializeLibrarySystem();
-        runMainApplication();
-        
-        scanner.close();
+        initializeLibrarySystem(); 
+        loginMenu();
+
         System.out.println("📚 Thank you for using Central Library! 📚");
-    }
+    }  
     
+    public static void loginMenu() {
+        while (true) {
+            System.out.println("\n============= LOGIN MENU ===============");
+            System.out.println("PLEASE PICK THE COORESPONDING OPTION NUMBER");
+            System.out.println("1. Member Login");
+            System.out.println("2. Librarian Login");
+            System.out.println("3. Quit Program");
+            System.out.println("========================================");
+
+            int choice = getIntInput("Choose option (1-3): ");
+
+            switch (choice) {
+                case 1:
+                    LibraryMember member = memberLogin();
+                    if (member != null) {
+                        System.out.println("Login successful! Welcome, " + member.getName());
+                        memberMenu(member); 
+                    }
+                    break;
+
+                case 2:
+                    Librarian librarian = librarianLogin();
+                    if (librarian != null) {
+                        System.out.println("Login successful! Welcome, " + librarian.getName());
+                        librarianOperations();
+                    }
+                    break;
+
+                case 3:
+                    System.out.println("Quitting program. Goodbye!");
+                    System.exit(0);
+                    break;
+            }
+        }
+    }
+
+    private static LibraryMember memberLogin() {
+        System.out.print("\nEnter Member ID: ");
+        String memberId = scanner.nextLine().trim();
+
+        for (LibraryMember member : centralLibrary.getLibraryMembers()) {
+            if (member.getMemberId().equalsIgnoreCase(memberId)) {
+                return member;
+            }
+        }
+
+        System.out.println("Member ID not found. Try again.\n");
+        return null;   
+    }
+
+    private static Librarian librarianLogin() {
+        System.out.print("\nEnter Librarian Employee ID: ");
+        String employeeId = scanner.nextLine().trim();
+
+        for (Librarian librarian : centralLibrary.getLibrarians()) {
+             if (librarian.getEmployeeId().equalsIgnoreCase(employeeId)) {
+                return librarian;
+            }   
+        }
+        System.out.println("Employee ID not found. Try again.\n");
+            return null;
+    }
+
     private static void initializeLibrarySystem() {
         JSONParser parser = new JSONParser();
         
@@ -143,23 +208,23 @@ public class MainApplication {
         }
     }
 
-
-
     private static void displaySystemStatus() {
-        System.out.println("\n📊 SYSTEM STATUS:");
+        System.out.println("\n:bar_chart: SYSTEM STATUS:");
         System.out.println("Library: " + centralLibrary.getName());
         Address addr = centralLibrary.getAddress();
-        System.out.printf("Address: %s, %s, %s %d%n", 
+        System.out.printf("Address: %s, %s, %s %d%n",
                          addr.getStreetName(), addr.getCity(), addr.getState(), addr.getZipCode());
-        System.out.println("📚 Items: " + centralLibrary.getItems().size());
-        System.out.println("👥 Members: " + centralLibrary.getLibraryMembers().size());
-        System.out.println("👨‍💼 Librarians: " + centralLibrary.getLibrarians().size());
+        System.out.println(":books: Items: " + centralLibrary.getItems().size());
+        System.out.println(":busts_in_silhouette: Members: " + centralLibrary.getLibraryMembers().size());
+        System.out.println(":male-office-worker: Librarians: " + centralLibrary.getLibrarians().size());
         System.out.println();
     }
-    
+
     private static void runMainApplication() {
         while (true) {
             showMainMenu();
+            List<Book> books = new List<>();
+
             int choice = getIntInput("Choose option (1-6): ");
             
             switch (choice) {
@@ -215,7 +280,7 @@ public class MainApplication {
             LibraryMember selectedMember = members.get(choice);
             memberMenu(selectedMember);
         } else {
-            System.out.println("❌ Invalid selection.\n");
+            System.out.println("Invalid selection.\n");
         }
     }
     
@@ -317,7 +382,6 @@ public class MainApplication {
         
     }
     
-
     private static void itemManagement() {
         System.out.println("\n📚 ITEM MANAGEMENT:");
         System.out.println("1. View All Items");
@@ -340,7 +404,6 @@ public class MainApplication {
                 break;
         }
     }
-    
 
     private static void viewAllMembers() {
         System.out.println("\n👥 ALL LIBRARY MEMBERS:");
@@ -352,7 +415,6 @@ public class MainApplication {
         }
         System.out.println();
     }
-    
 
     private static void searchLibrary() {
         System.out.print("\n🔍 Enter search keyword: ");
@@ -374,7 +436,6 @@ public class MainApplication {
         }
         System.out.println();
     }
-    
 
     private static void displayItemsWithIds() {
         System.out.println("📚 AVAILABLE LIBRARY ITEMS:");
@@ -409,4 +470,19 @@ public class MainApplication {
             }
         }
     }
+
+    private static boolean isDuplicateBook(Book newBook) {
+    for (LibraryItem item : centralLibrary.getItems()) {
+        if (item instanceof Book oldBook) {
+            if (oldBook.getIsbn().equalsIgnoreCase(newBook.getIsbn())) {
+                return true;
+            }
+            if (oldBook.getTitle().equalsIgnoreCase(newBook.getTitle()) &&
+                oldBook.getAuthor().equalsIgnoreCase(newBook.getAuthor())) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 }

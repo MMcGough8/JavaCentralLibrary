@@ -115,7 +115,7 @@ public class Library {
             return results;
     }
 
-    
+
     //Method to display all items in the library.
     public void displayAllItems() {
         String header = "=== Library Items ===";

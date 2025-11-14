@@ -103,5 +103,5 @@ public class LibraryMember extends Person {
             throw new Error("Payment amount cannot exceed outstanding fees");
         }
         outstandingFees -= amount;
-    }
+    }   
 }
