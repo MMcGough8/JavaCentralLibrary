@@ -1,6 +1,5 @@
 package com.zipcodewilmington.centrallibrary;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -8,13 +7,79 @@ public class MainApplication {
     
     private static Library centralLibrary;
     private static Scanner scanner = new Scanner(System.in);
-    
+
+    public static void loginMenu() {
+        while (true) {
+            System.out.println("\n=== LOGIN MENU ====");
+            System.out.println("1. Member Login");
+            System.out.println("2. Librarian Login");
+            System.out.println("3. Quit Program");
+            System.out.println("========================================");
+
+            int choice = getIntInput("Choose option (1-3): ");
+
+            switch (choice) {
+                case 1:
+                    LibraryMember member = memberLogin();
+                    if (member != null) {
+                        System.out.println("Login successful! Welcome, " + member.getName());
+                        memberMenu(member); 
+                    }
+                    break;
+
+                case 2:
+                    Librarian librarian = librarianLogin();
+                    if (librarian != null) {
+                        System.out.println("Login successful! Welcome, " + librarian.getName());
+                        librarianOperations();
+                    }
+                    break;
+
+                case 3:
+                    System.out.println("Quitting program. Goodbye!");
+                    System.exit(0);
+                    break;
+            }
+        }
+    }
+
+
+    private static LibraryMember memberLogin() {
+        System.out.print("\nEnter Member ID: ");
+        String memberId = scanner.nextLine().trim();
+
+        for (LibraryMember member : centralLibrary.getLibraryMembers()) {
+            if (member.getMemberId().equalsIgnoreCase(memberId)) {
+                return member;
+            }
+        }
+        System.out.println("Member ID not found. Try again.\n");
+        return null;   
+    }
+
+        private static Librarian librarianLogin() {
+            System.out.print("\nEnter Librarian Employee ID: ");
+            String employeeId = scanner.nextLine().trim();
+
+            for (Librarian librarian : centralLibrary.getLibrarians()) {
+                if (librarian.getEmployeeId().equalsIgnoreCase(employeeId)) {
+                    return librarian;
+                }   
+            }
+            System.out.println("Employee ID not found. Try again.\n");
+                return null;
+    }
+
+
+
+
     public static void main(String[] args) {
-        System.out.println("🏛️ === CENTRAL LIBRARY MANAGEMENT SYSTEM === 🏛️");
+        System.out.println("===============================================================================");
+        System.out.println("🏛️ === Welcome to the Central Library System! === 🏛️");
         System.out.println();
 
-        runMainApplication();
-        
+        loginMenu();
+
         scanner.close();
         System.out.println("📚 Thank you for using Central Library! 📚");
     }
@@ -92,7 +157,7 @@ public class MainApplication {
             LibraryMember selectedMember = members.get(choice);
             memberMenu(selectedMember);
         } else {
-            System.out.println("❌ Invalid selection.\n");
+            System.out.println("Invalid selection.\n");
         }
     }
     
