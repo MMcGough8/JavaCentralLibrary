@@ -7,8 +7,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 import java.util.List.*;
+
 
 public class MainApplication {
 
@@ -206,17 +206,6 @@ public class MainApplication {
       "Central Library",
             new Address("123 Main St", "Alexandra", "DE", 19801));
         }
-    }
-
-    for (Book book : jsonBooks) {
-        if (!isDuplicateBook(book)) {
-            centralLibrary.addItem(book);
-        }
-    }
-
-    System.out.println("Book list initialized from JSON" 
-        + centralLibrary.getItems().size() + " items loaded");
-
     }
 
     private static void displaySystemStatus() {
@@ -466,7 +455,7 @@ public class MainApplication {
         }
     }
 
-private static boolean isDuplicateBook(Book newBook) {
+    private static boolean isDuplicateBook(Book newBook) {
     for (LibraryItem item : centralLibrary.getItems()) {
         if (item instanceof Book oldBook) {
             if (oldBook.getIsbn().equalsIgnoreCase(newBook.getIsbn())) {
