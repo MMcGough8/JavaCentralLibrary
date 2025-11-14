@@ -7,8 +7,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import java.util.List.*;
-
+import java.util.List;
+import java.util.Date;
 
 public class MainApplication {
 
@@ -20,7 +20,6 @@ public class MainApplication {
         System.out.println();
         System.out.println("🏛️ === Welcome to the Central Library System! === 🏛️");
         System.out.println();
-        initializeLibrarySystem();
         initializeLibrarySystem(); 
         loginMenu();
 
@@ -367,7 +366,7 @@ public class MainApplication {
     }
 
     private static void borrowItem(LibraryMember member) {
-
+        
     }
 
     private static void returnItem(LibraryMember member) {
@@ -375,7 +374,22 @@ public class MainApplication {
     }
 
     private static void showBorrowedItems(LibraryMember member) {
-
+        List<LibraryItem> borrowed = member.getBorrowedItems();
+        if (borrowed.isEmpty()) {
+            System.out.println("\n You have no borrowed items.\n");
+            return;
+        }
+        System.out.println("\n YOUR BORROWED ITEMS");
+        System.out.println("-".repeat(70));
+        for (int i = 0; i < borrowed.size(); i++) {
+            LibraryItem item = borrowed.get(i);
+            System.out.printf("%d, %s, (%s) - Days Left: %d days%n",
+                        i + 1,
+                        item.getTitle(), 
+                        item.getItemType(), 
+                        item.getMaxBorrowDays());
+        }
+        System.out.println();
     }
 
     private static void payFees(LibraryMember member) {
