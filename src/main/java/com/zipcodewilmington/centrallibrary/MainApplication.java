@@ -10,6 +10,7 @@ import org.json.simple.parser.ParseException;
 import java.util.List.*;
 import java.util.Date;
 
+
 public class MainApplication {
 
     private static Library centralLibrary;
@@ -63,11 +64,30 @@ public class MainApplication {
     }
 
     private static LibraryMember memberLogin() {
+        System.out.println("DEBUG -about to get library members...");
+        try {
+        List<LibraryMember> members = centralLibrary.getLibraryMembers();
+        System.out.println("DEBUG - Got " + members.size() + " members from getLibraryMembers()");
+        
+        for (LibraryMember m : members) {
+            System.out.println("DEBUG - Member: " + m.getMemberId() + " - " + m.getName());
+        }
+    } catch (Exception e) {
+        System.out.println("ERROR getting members: " + e.getMessage());
+        e.printStackTrace();
+    }
+
+
+
         System.out.print("\nEnter Member ID: ");
         String memberId = scanner.nextLine().trim();
 
+System.out.println("DEBUG - Searching for: '" + memberId + "'");
+
         for (LibraryMember member : centralLibrary.getLibraryMembers()) {
+            System.out.println("DEBUG - Checking member: '" + member.getMemberId() + "'");
             if (member.getMemberId().equalsIgnoreCase(memberId)) {
+                System.out.println("DEBUG - MATCH FOUND!");
                 return member;
             }
         }
@@ -91,21 +111,20 @@ public class MainApplication {
 
     private static void initializeLibrarySystem() {
         JSONParser parser = new JSONParser();
-        
         try {
-            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("file.json"));
-
+            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("/Users/mmcgough/Projects/JavaCentralLibrary/src/main/java/com/zipcodewilmington/centrallibrary/file.json"));
+               
             String libraryName = (String) jsonObject.get("libraryName");
             String addressStr = (String) jsonObject.get("address");
-            String[] partsA = addressStr.split(",");
-            Address address = new Address(partsA[0].trim(), partsA[1].trim(), partsA[2].trim(), Integer.parseInt(partsA[3].trim()));
+            String[] parts = addressStr.split(",");
+            Address address = new Address();
 
             centralLibrary = new Library(libraryName, address);
 
             JSONArray librarians = (JSONArray) jsonObject.get("librarians");
             for (Object obj : librarians) {
                 JSONObject librarianJson = (JSONObject) obj;
-    
+                
                 Librarian librarian = new Librarian(
                     (String) librarianJson.get("name"),            
                     ((Long) librarianJson.get("age")).intValue(),    
@@ -116,42 +135,39 @@ public class MainApplication {
                     ((Long) librarianJson.get("salary")).intValue());
             
                 centralLibrary.addLibrarian(librarian);
+                
             }
 
             JSONArray members = (JSONArray) jsonObject.get("members");
-            for (Object obj : members) {
-                JSONObject memberJson = (JSONObject) obj;
-    
-            String memberAddressStr = (String) memberJson.get("address");
-            Address memberAddress;
-            if (memberAddressStr != null && !memberAddressStr.isEmpty()) {
-                String[] parts = memberAddressStr.split(",");
-                if (parts.length >= 4) {
-                    memberAddress = new Address(
-                        parts[0].trim(), 
-                        parts[1].trim(), 
-                        parts[2].trim(), 
-                        Integer.parseInt(parts[3].trim()));
-                } else {
-                    memberAddress = new Address("Unknown", "Unknown", "UN", 0);
-                }
-            } else {
-                memberAddress = new Address("Unknown", "Unknown", "UN", 0);
-            }
+System.out.println("DEBUG - Found " + (members != null ? members.size() : 0) + " members in JSON");
 
-            Date membershipDate = new Date();
-
-            LibraryMember member = new LibraryMember(
-                (String) memberJson.get("name"),
-                ((Long) memberJson.get("age")).intValue(),
-                (String) memberJson.get("email"),
-                ((Long) memberJson.get("phonenumber")).intValue(),
-                (String) memberJson.get("memberId"),
-                membershipDate,
-                memberAddress);
+if (members != null) {
+    System.out.println("DEBUG - Starting to process members...");
     
-            centralLibrary.addLibraryMember(member);
-        }
+    for (Object obj : members) {  // <-- MOVE THIS INSIDE
+        JSONObject memberJson = (JSONObject) obj;
+        
+        System.out.println("DEBUG - Processing: " + memberJson.get("name"));
+        
+        Date membershipDate = new Date();
+
+        LibraryMember member = new LibraryMember(
+            (String) memberJson.get("name"),
+            ((Long) memberJson.get("age")).intValue(),
+            (String) memberJson.get("email"),
+            ((Long) memberJson.get("phonenumber")).intValue(),
+            (String) memberJson.get("memberId"),
+            membershipDate,
+            new Address("Unknown", "Unknown", "UN", 0));
+
+        centralLibrary.addLibraryMember(member);
+        System.out.println("DEBUG - Added member: " + member.getMemberId());
+    }
+    
+    System.out.println("DEBUG - Finished! Total members: " + centralLibrary.getLibraryMembers().size());
+} else {
+    System.out.println("DEBUG - Members array is null");
+}
 
             JSONArray books = (JSONArray) jsonObject.get("books");
             for (Object obj : books) {
