@@ -217,7 +217,6 @@ public class MainApplication {
     private static void runMainApplication() {
         while (true) {
             showMainMenu();
-            List<Book> books = new List<>();
 
             int choice = getIntInput("Choose option (1-6): ");
             
