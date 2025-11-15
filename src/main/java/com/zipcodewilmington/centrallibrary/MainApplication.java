@@ -69,30 +69,11 @@ public class MainApplication {
     }
 
     private static LibraryMember memberLogin() {
-        System.out.println("DEBUG -about to get library members...");
-        try {
-        List<LibraryMember> members = centralLibrary.getLibraryMembers();
-        System.out.println("DEBUG - Got " + members.size() + " members from getLibraryMembers()");
-        
-        for (LibraryMember m : members) {
-            System.out.println("DEBUG - Member: " + m.getMemberId() + " - " + m.getName());
-        }
-    } catch (Exception e) {
-        System.out.println("ERROR getting members: " + e.getMessage());
-        e.printStackTrace();
-    }
-
-
-
         System.out.print("\nEnter Member ID: ");
         String memberId = scanner.nextLine().trim();
 
-System.out.println("DEBUG - Searching for: '" + memberId + "'");
-
         for (LibraryMember member : centralLibrary.getLibraryMembers()) {
-            System.out.println("DEBUG - Checking member: '" + member.getMemberId() + "'");
             if (member.getMemberId().equalsIgnoreCase(memberId)) {
-                System.out.println("DEBUG - MATCH FOUND!");
                 return member;
             }
         }
@@ -141,39 +122,27 @@ System.out.println("DEBUG - Searching for: '" + memberId + "'");
                     ((Long) librarianJson.get("salary")).intValue());
             
                 centralLibrary.addLibrarian(librarian);
-                
             }
 
             JSONArray members = (JSONArray) jsonObject.get("members");
-System.out.println("DEBUG - Found " + (members != null ? members.size() : 0) + " members in JSON");
+            if (members != null) {
+                for (Object obj : members) {
+                    JSONObject memberJson = (JSONObject) obj;
+                    
+                    Date membershipDate = new Date();
 
-if (members != null) {
-    System.out.println("DEBUG - Starting to process members...");
-    
-    for (Object obj : members) {  // <-- MOVE THIS INSIDE
-        JSONObject memberJson = (JSONObject) obj;
-        
-        System.out.println("DEBUG - Processing: " + memberJson.get("name"));
-        
-        Date membershipDate = new Date();
+                    LibraryMember member = new LibraryMember(
+                        (String) memberJson.get("name"),
+                        ((Long) memberJson.get("age")).intValue(),
+                        (String) memberJson.get("email"),
+                        ((Long) memberJson.get("phonenumber")).intValue(),
+                        (String) memberJson.get("memberId"),
+                        membershipDate,
+                        new Address("Unknown", "Unknown", "UN", 0));
 
-        LibraryMember member = new LibraryMember(
-            (String) memberJson.get("name"),
-            ((Long) memberJson.get("age")).intValue(),
-            (String) memberJson.get("email"),
-            ((Long) memberJson.get("phonenumber")).intValue(),
-            (String) memberJson.get("memberId"),
-            membershipDate,
-            new Address("Unknown", "Unknown", "UN", 0));
-
-        centralLibrary.addLibraryMember(member);
-        System.out.println("DEBUG - Added member: " + member.getMemberId());
-    }
-    
-    System.out.println("DEBUG - Finished! Total members: " + centralLibrary.getLibraryMembers().size());
-} else {
-    System.out.println("DEBUG - Members array is null");
-}
+                    centralLibrary.addLibraryMember(member);
+                }
+            }
 
             JSONArray books = (JSONArray) jsonObject.get("books");
             for (Object obj : books) {
@@ -186,8 +155,8 @@ if (members != null) {
                     (String) bookJson.get("genre"),      
                     ((Long) bookJson.get("pages")).intValue());
     
-            centralLibrary.addItem(book);
-        }
+                centralLibrary.addItem(book);
+            }
 
             JSONArray periodicals = (JSONArray) jsonObject.get("periodicals");
             for (Object obj : periodicals) {
@@ -204,8 +173,8 @@ if (members != null) {
                     (String) periodicalJson.get("publisher"),
                     (String) periodicalJson.get("publicationDate"));
     
-            centralLibrary.addItem(periodical);
-        }
+                centralLibrary.addItem(periodical);
+            }
 
             JSONArray movies = (JSONArray) jsonObject.get("movies");
             for (Object obj : movies) {
@@ -220,12 +189,10 @@ if (members != null) {
                     (String) movieJson.get("rating"),
                     (String) movieJson.get("genre"));
     
-            centralLibrary.addItem(dvd);
-        }
+                centralLibrary.addItem(dvd);
+            }
         } catch (Exception e) {
-            centralLibrary = new Library(
-      "Central Library",
-            new Address("123 Main St", "Alexandra", "DE", 19801)); 
+            e.printStackTrace();
         }
     }
 
@@ -413,8 +380,7 @@ if (members != null) {
         }
         member.borrowItem(item);
         System.out.println("You borrowed " + item.getTitle() + "\n");
-}
-
+    }
 
     private static void returnItem(LibraryMember member) {
         List<LibraryItem> borrowed = member.getBorrowedItems();
@@ -443,46 +409,45 @@ if (members != null) {
         int daysLate = getIntInput("Enter the number of days late: ");
         member.returnItem(toReturn, daysLate);
         System.out.println("Returned: " + toReturn.getTitle() + "\n");
-}
+    }
 
-private static void showBorrowedItems(LibraryMember member) {
-    System.out.println("\nYour Borrowed Items:");
-    List<LibraryItem> items = member.getBorrowedItems();
-    if (items.isEmpty()) {
-        System.out.println("You have not borrowed any items.\n");
-        return;
+    private static void showBorrowedItems(LibraryMember member) {
+        System.out.println("\nYour Borrowed Items:");
+        List<LibraryItem> items = member.getBorrowedItems();
+        if (items.isEmpty()) {
+            System.out.println("You have not borrowed any items.\n");
+            return;
+        }
+        System.out.println("-".repeat(60));
+        for (LibraryItem item : items) {
+            System.out.printf("%-10s %-30s %-10s%n",
+                item.getId(),
+                item.getTitle(),
+                item.getItemType()
+            );
+        }
+        System.out.println("-".repeat(60) + "\n");
     }
-    System.out.println("-".repeat(60));
-    for (LibraryItem item : items) {
-        System.out.printf("%-10s %-30s %-10s%n",
-            item.getId(),
-            item.getTitle(),
-            item.getItemType()
-        );
-    }
-    System.out.println("-".repeat(60) + "\n");
-}
 
-private static void payFees(LibraryMember member) {
-    System.out.println("\nPay Outstanding Fees");
-    double fees = member.getOutstandingFees();
-    if (fees <= 0) {
-        System.out.println("You have no outstanding fees!\n");
-        return;
+    private static void payFees(LibraryMember member) {
+        System.out.println("\nPay Outstanding Fees");
+        double fees = member.getOutstandingFees();
+        if (fees <= 0) {
+            System.out.println("You have no outstanding fees!\n");
+            return;
+        }
+        System.out.println("You currently owe: $" + fees);
+        System.out.print("Enter amount to pay: ");
+        double amount = getDoubleInput("Enter amount to pay: ");
+        
+        if (amount <= 0) {
+            System.out.println("Invalid amount.\n");
+            return;
+        }
+        member.payFees(amount);
+        System.out.println("Payment processed.");
+        System.out.println("Remaining balance: $" + member.getOutstandingFees() + "\n");
     }
-    System.out.println("You currently owe: $" + fees);
-    System.out.print("Enter amount to pay: ");
-    double amount = getDoubleInput("Enter amount to pay: ");
-    
-    if (amount <= 0) {
-        System.out.println("Invalid amount.\n");
-        return;
-    }
-    member.payFees(amount);
-    System.out.println("Payment processed.");
-    System.out.println("Remaining balance: $" + member.getOutstandingFees() + "\n");
-}
-
     
     private static void itemManagement() {
         System.out.println("\n📚 ITEM MANAGEMENT:");
