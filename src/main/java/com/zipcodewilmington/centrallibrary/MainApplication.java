@@ -1,7 +1,10 @@
 package com.zipcodewilmington.centrallibrary;
 
 import java.io.Console;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Scanner;
 import org.json.simple.JSONArray;
@@ -9,6 +12,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import java.util.List.*;
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -94,8 +98,14 @@ public class MainApplication {
     private static void initializeLibrarySystem() {
         JSONParser parser = new JSONParser();
         try {
-            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("/Users/mmcgough/Projects/JavaCentralLibrary/src/main/java/com/zipcodewilmington/centrallibrary/file.json"));
-               
+            InputStream inputStream = MainApplication.class
+                .getClassLoader()
+                .getResourceAsStream("file.json");
+            if (inputStream == null) {
+                throw new FileNotFoundException("file.json not found in resources folder!");
+            }
+            JSONObject jsonObject = (JSONObject) parser.parse(new InputStreamReader(inputStream));
+
             String libraryName = (String) jsonObject.get("libraryName");
             String addressStr = (String) jsonObject.get("address");
             String[] parts = addressStr.split(",");
@@ -174,13 +184,13 @@ public class MainApplication {
             JSONArray movies = (JSONArray) jsonObject.get("movies");
             for (Object obj : movies) {
                 JSONObject movieJson = (JSONObject) obj;
-    
+                
                 Dvd dvd = new Dvd(
                     (String) movieJson.get("id"),
                     (String) movieJson.get("title"),
                     (String) movieJson.get("location"),
                     (String) movieJson.get("director"),
-                    ((Long) movieJson.get("duration")).intValue(),
+                    (Long) movieJson.get("duration"),
                     (String) movieJson.get("rating"),
                     (String) movieJson.get("genre"));
     
@@ -206,7 +216,7 @@ public class MainApplication {
     private static void runMainApplication() {
         while (true) {
             showMainMenu();
-            List<Book> books = new List<>();
+            List<Book> books = new ArrayList<>();
 
             int choice = getIntInput("Choose option (1-6): ");
             
