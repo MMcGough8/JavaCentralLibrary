@@ -22,10 +22,7 @@
       "phonenumber": 5551234,
       "memberId": "M001",
       "membershipDate": "01/01/2015",
-      "borrowedItems": [
-        {
-        }
-      ]
+      "borrowedItems": []
     },
     {
       "name": "Bob Wilson",
@@ -34,10 +31,7 @@
       "phonenumber": 5554321,
       "memberId": "M002",
       "membershipDate": "02/02/2015",
-      "borrowedItems": [
-        {
-        }
-      ]
+      "borrowedItems": []
     }
   ],
   "books": [

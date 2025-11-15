@@ -1,5 +1,6 @@
 package com.zipcodewilmington.centrallibrary;
 
+import java.io.Console;
 import java.io.FileReader;
 import java.util.List;
 import java.util.Scanner;
@@ -8,7 +9,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import java.util.List.*;
-import java.util.Date; 
+import java.util.Date;
 
 
 public class MainApplication {
@@ -21,9 +22,7 @@ public class MainApplication {
         System.out.println();
         System.out.println("🏛️ === Welcome to the Central Library System! === 🏛️");
         System.out.println();
-       
-        initializeLibrarySystem();
-        System.out.println(centralLibrary.getLibraryMembers());
+        initializeLibrarySystem(); 
         loginMenu();
 
 
@@ -70,11 +69,30 @@ public class MainApplication {
     }
 
     private static LibraryMember memberLogin() {
+        System.out.println("DEBUG -about to get library members...");
+        try {
+        List<LibraryMember> members = centralLibrary.getLibraryMembers();
+        System.out.println("DEBUG - Got " + members.size() + " members from getLibraryMembers()");
+        
+        for (LibraryMember m : members) {
+            System.out.println("DEBUG - Member: " + m.getMemberId() + " - " + m.getName());
+        }
+    } catch (Exception e) {
+        System.out.println("ERROR getting members: " + e.getMessage());
+        e.printStackTrace();
+    }
+
+
+
         System.out.print("\nEnter Member ID: ");
         String memberId = scanner.nextLine().trim();
 
+System.out.println("DEBUG - Searching for: '" + memberId + "'");
+
         for (LibraryMember member : centralLibrary.getLibraryMembers()) {
+            System.out.println("DEBUG - Checking member: '" + member.getMemberId() + "'");
             if (member.getMemberId().equalsIgnoreCase(memberId)) {
+                System.out.println("DEBUG - MATCH FOUND!");
                 return member;
             }
         }
@@ -99,22 +117,20 @@ public class MainApplication {
 
     private static void initializeLibrarySystem() {
         JSONParser parser = new JSONParser();
-        
-        try { 
-            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("/Users/dmurali/Projects/JavaCentralLibrary/src/main/java/com/zipcodewilmington/centrallibrary/file.json"));
-            
-            String libraryName = (String) jsonObject.get("libraryName"); 
-            System.out.println(libraryName);
-            String addressStr = (String) jsonObject.get("address");    
-            String[] partsA = addressStr.split(",");    
-            Address address = new Address(); 
+        try {
+            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("/Users/mmcgough/Projects/JavaCentralLibrary/src/main/java/com/zipcodewilmington/centrallibrary/file.json"));
+               
+            String libraryName = (String) jsonObject.get("libraryName");
+            String addressStr = (String) jsonObject.get("address");
+            String[] parts = addressStr.split(",");
+            Address address = new Address();
 
             centralLibrary = new Library(libraryName, address); 
 
             JSONArray librarians = (JSONArray) jsonObject.get("librarians"); 
             for (Object obj : librarians) {
                 JSONObject librarianJson = (JSONObject) obj;
-    
+                
                 Librarian librarian = new Librarian(
                     (String) librarianJson.get("name"),            
                     ((Long) librarianJson.get("age")).intValue(),    
@@ -125,42 +141,39 @@ public class MainApplication {
                     ((Long) librarianJson.get("salary")).intValue());
             
                 centralLibrary.addLibrarian(librarian);
+                
             }
 
             JSONArray members = (JSONArray) jsonObject.get("members");
-            for (Object obj : members) {
-                JSONObject memberJson = (JSONObject) obj;
-    
-                String memberAddressStr = (String) memberJson.get("address");
-                Address memberAddress;
-                if (memberAddressStr != null && !memberAddressStr.isEmpty()) {
-                    String[] parts = memberAddressStr.split(",");
-                    if (parts.length >= 4) {
-                        memberAddress = new Address(
-                            parts[0].trim(), 
-                            parts[1].trim(), 
-                            parts[2].trim(), 
-                            Integer.parseInt(parts[3].trim()));
-                    } else {
-                        memberAddress = new Address("Unknown", "Unknown", "UN", 0);
-                    }
-                } else {
-                    memberAddress = new Address("Unknown", "Unknown", "UN", 0);
-                }
+System.out.println("DEBUG - Found " + (members != null ? members.size() : 0) + " members in JSON");
 
-                Date membershipDate = new Date();
-
-                LibraryMember member = new LibraryMember(
-                (String) memberJson.get("name"),
-                ((Long) memberJson.get("age")).intValue(),
-                (String) memberJson.get("email"),
-                ((Long) memberJson.get("phonenumber")).intValue(),
-                (String) memberJson.get("memberId"),
-                membershipDate,
-                memberAddress);
+if (members != null) {
+    System.out.println("DEBUG - Starting to process members...");
     
-                centralLibrary.addLibraryMember(member);
-            }
+    for (Object obj : members) {  // <-- MOVE THIS INSIDE
+        JSONObject memberJson = (JSONObject) obj;
+        
+        System.out.println("DEBUG - Processing: " + memberJson.get("name"));
+        
+        Date membershipDate = new Date();
+
+        LibraryMember member = new LibraryMember(
+            (String) memberJson.get("name"),
+            ((Long) memberJson.get("age")).intValue(),
+            (String) memberJson.get("email"),
+            ((Long) memberJson.get("phonenumber")).intValue(),
+            (String) memberJson.get("memberId"),
+            membershipDate,
+            new Address("Unknown", "Unknown", "UN", 0));
+
+        centralLibrary.addLibraryMember(member);
+        System.out.println("DEBUG - Added member: " + member.getMemberId());
+    }
+    
+    System.out.println("DEBUG - Finished! Total members: " + centralLibrary.getLibraryMembers().size());
+} else {
+    System.out.println("DEBUG - Members array is null");
+}
 
             JSONArray books = (JSONArray) jsonObject.get("books");
             for (Object obj : books) {
@@ -384,26 +397,93 @@ public class MainApplication {
 
 
     private static void borrowItem(LibraryMember member) {
+        System.out.println("\nBorrow an item");
+        displayItemsWithIds();
+        System.out.print("Enter the ID of the item to borrow: ");
+        String itemId = scanner.nextLine().trim();
+        
+        LibraryItem item = findItemById(itemId);
+        if (item == null) {
+            System.out.println("No item found with this ID: " + itemId);
+            return;
+        }
+        if (!item.isAvailable()) {
+            System.out.println("This item is already checked out.");
+            return;
+        }
+        member.borrowItem(item);
+        System.out.println("You borrowed " + item.getTitle() + "\n");
+}
 
-    }
 
     private static void returnItem(LibraryMember member) {
-
-    }
-
-    private static void showBorrowedItems(LibraryMember member) {
-
-    }
-
-    private static void payFees(LibraryMember member) {
+        List<LibraryItem> borrowed = member.getBorrowedItems();
+        if (borrowed.isEmpty()) {
+            System.out.println("You have no items to return.\n");
+            return;
+        }
+        System.out.println("Your Borrowed Items:");
+        for (LibraryItem item : borrowed) {
+            System.out.println("- " + item.getId() + " : " + item.getTitle());
+        }
+        System.out.print("Enter the ID of the item to return: ");
+        String itemId = scanner.nextLine().trim();
         
+        LibraryItem toReturn = null;
+        for (LibraryItem item : borrowed) {
+            if (item.getId().equals(itemId)) {
+                toReturn = item;
+                break;
+            }
+        }
+        if (toReturn == null) {
+            System.out.println("You do not have an item with that ID.\n");
+            return;
+        }
+        int daysLate = getIntInput("Enter the number of days late: ");
+        member.returnItem(toReturn, daysLate);
+        System.out.println("Returned: " + toReturn.getTitle() + "\n");
+}
+
+private static void showBorrowedItems(LibraryMember member) {
+    System.out.println("\nYour Borrowed Items:");
+    List<LibraryItem> items = member.getBorrowedItems();
+    if (items.isEmpty()) {
+        System.out.println("You have not borrowed any items.\n");
+        return;
     }
+    System.out.println("-".repeat(60));
+    for (LibraryItem item : items) {
+        System.out.printf("%-10s %-30s %-10s%n",
+            item.getId(),
+            item.getTitle(),
+            item.getItemType()
+        );
+    }
+    System.out.println("-".repeat(60) + "\n");
+}
+
+private static void payFees(LibraryMember member) {
+    System.out.println("\nPay Outstanding Fees");
+    double fees = member.getOutstandingFees();
+    if (fees <= 0) {
+        System.out.println("You have no outstanding fees!\n");
+        return;
+    }
+    System.out.println("You currently owe: $" + fees);
+    System.out.print("Enter amount to pay: ");
+    double amount = getDoubleInput("Enter amount to pay: ");
     
+    if (amount <= 0) {
+        System.out.println("Invalid amount.\n");
+        return;
+    }
+    member.payFees(amount);
+    System.out.println("Payment processed.");
+    System.out.println("Remaining balance: $" + member.getOutstandingFees() + "\n");
+}
 
-
-
-
-
+    
     private static void itemManagement() {
         System.out.println("\n📚 ITEM MANAGEMENT:");
         System.out.println("1. View All Items");
@@ -489,6 +569,17 @@ public class MainApplication {
                 return Integer.parseInt(scanner.nextLine().trim());
             } catch (NumberFormatException e) {
                 System.out.println("❌ Please enter a valid number.");
+            }
+        }
+    }
+
+    private static double getDoubleInput(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                return Double.parseDouble(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid number.");
             }
         }
     }
