@@ -7,7 +7,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import java.util.List;
+import java.util.List.*;
 import java.util.Date;
 
 public class MainApplication {
@@ -366,6 +366,11 @@ public class MainApplication {
     }
 
     private static void borrowItem(LibraryMember member) {
+        System.out.println("\n BORROW AN ITEM");
+        displayItemsWithIds();
+        System.out.println("Enter item ID to borrow or cancel item");
+
+
         
     }
 
