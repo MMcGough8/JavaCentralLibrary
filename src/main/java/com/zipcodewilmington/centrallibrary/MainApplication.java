@@ -98,7 +98,7 @@ public class MainApplication {
                
             String libraryName = (String) jsonObject.get("libraryName");
             String addressStr = (String) jsonObject.get("address");
-            String[] partsA = addressStr.split(",");
+            String[] parts = addressStr.split(",");
             Address address = new Address();
 
             centralLibrary = new Library(libraryName, address);
@@ -126,13 +126,13 @@ System.out.println("Help!!");
             String memberAddressStr = (String) memberJson.get("address");
             Address memberAddress;
             if (memberAddressStr != null && !memberAddressStr.isEmpty()) {
-                String[] parts = memberAddressStr.split(",");
-                if (parts.length >= 4) {
+                String[] partsA = memberAddressStr.split(",");
+                if (partsA.length >= 4) {
                     memberAddress = new Address(
-                        parts[0].trim(), 
-                        parts[1].trim(), 
-                        parts[2].trim(), 
-                        Integer.parseInt(parts[3].trim()));
+                        partsA[0].trim(), 
+                        partsA[1].trim(), 
+                        partsA[2].trim(), 
+                        Integer.parseInt(partsA[3].trim()));
                 } else {
                     memberAddress = new Address("Unknown", "Unknown", "UN", 0);
                 }
