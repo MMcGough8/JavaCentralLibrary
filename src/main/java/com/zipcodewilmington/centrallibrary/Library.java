@@ -38,7 +38,7 @@ public class Library {
     }
 
     public List<LibraryMember> getLibraryMembers() {
-        return libraryMembers;
+        return this.libraryMembers;
     }
 
     //Method to add a new item to the library's collection

@@ -8,6 +8,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import java.util.List.*;
+import java.util.Date; 
 
 
 public class MainApplication {
@@ -20,9 +21,14 @@ public class MainApplication {
         System.out.println();
         System.out.println("🏛️ === Welcome to the Central Library System! === 🏛️");
         System.out.println();
+       
         initializeLibrarySystem();
-        initializeLibrarySystem(); 
+        System.out.println(centralLibrary.getLibraryMembers());
         loginMenu();
+
+
+
+
 
         System.out.println("📚 Thank you for using Central Library! 📚");
     }  
@@ -41,7 +47,7 @@ public class MainApplication {
             switch (choice) {
                 case 1:
                     LibraryMember member = memberLogin();
-                    if (member != null) {
+                   if (member != null) {
                         System.out.println("Login successful! Welcome, " + member.getName());
                         memberMenu(member); 
                     }
@@ -84,26 +90,28 @@ public class MainApplication {
         for (Librarian librarian : centralLibrary.getLibrarians()) {
              if (librarian.getEmployeeId().equalsIgnoreCase(employeeId)) {
                 return librarian;
-            }   
+            }  
         }
         System.out.println("Employee ID not found. Try again.\n");
             return null;
     }
 
+
     private static void initializeLibrarySystem() {
         JSONParser parser = new JSONParser();
         
-        try {
-            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("file.json"));
+        try { 
+            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("/Users/dmurali/Projects/JavaCentralLibrary/src/main/java/com/zipcodewilmington/centrallibrary/file.json"));
+            
+            String libraryName = (String) jsonObject.get("libraryName"); 
+            System.out.println(libraryName);
+            String addressStr = (String) jsonObject.get("address");    
+            String[] partsA = addressStr.split(",");    
+            Address address = new Address(); 
 
-            String libraryName = (String) jsonObject.get("libraryName");
-            String addressStr = (String) jsonObject.get("address");
-            String[] partsA = addressStr.split(",");
-            Address address = new Address(partsA[0].trim(), partsA[1].trim(), partsA[2].trim(), Integer.parseInt(partsA[3].trim()));
+            centralLibrary = new Library(libraryName, address); 
 
-            centralLibrary = new Library(libraryName, address);
-
-            JSONArray librarians = (JSONArray) jsonObject.get("librarians");
+            JSONArray librarians = (JSONArray) jsonObject.get("librarians"); 
             for (Object obj : librarians) {
                 JSONObject librarianJson = (JSONObject) obj;
     
@@ -123,26 +131,26 @@ public class MainApplication {
             for (Object obj : members) {
                 JSONObject memberJson = (JSONObject) obj;
     
-            String memberAddressStr = (String) memberJson.get("address");
-            Address memberAddress;
-            if (memberAddressStr != null && !memberAddressStr.isEmpty()) {
-                String[] parts = memberAddressStr.split(",");
-                if (parts.length >= 4) {
-                    memberAddress = new Address(
-                        parts[0].trim(), 
-                        parts[1].trim(), 
-                        parts[2].trim(), 
-                        Integer.parseInt(parts[3].trim()));
+                String memberAddressStr = (String) memberJson.get("address");
+                Address memberAddress;
+                if (memberAddressStr != null && !memberAddressStr.isEmpty()) {
+                    String[] parts = memberAddressStr.split(",");
+                    if (parts.length >= 4) {
+                        memberAddress = new Address(
+                            parts[0].trim(), 
+                            parts[1].trim(), 
+                            parts[2].trim(), 
+                            Integer.parseInt(parts[3].trim()));
+                    } else {
+                        memberAddress = new Address("Unknown", "Unknown", "UN", 0);
+                    }
                 } else {
                     memberAddress = new Address("Unknown", "Unknown", "UN", 0);
                 }
-            } else {
-                memberAddress = new Address("Unknown", "Unknown", "UN", 0);
-            }
 
-            Date membershipDate = new Date();
+                Date membershipDate = new Date();
 
-            LibraryMember member = new LibraryMember(
+                LibraryMember member = new LibraryMember(
                 (String) memberJson.get("name"),
                 ((Long) memberJson.get("age")).intValue(),
                 (String) memberJson.get("email"),
@@ -151,8 +159,8 @@ public class MainApplication {
                 membershipDate,
                 memberAddress);
     
-            centralLibrary.addLibraryMember(member);
-        }
+                centralLibrary.addLibraryMember(member);
+            }
 
             JSONArray books = (JSONArray) jsonObject.get("books");
             for (Object obj : books) {
@@ -204,9 +212,15 @@ public class MainApplication {
         } catch (Exception e) {
             centralLibrary = new Library(
       "Central Library",
-            new Address("123 Main St", "Alexandra", "DE", 19801));
+            new Address("123 Main St", "Alexandra", "DE", 19801)); 
         }
     }
+
+
+
+
+
+
 
     private static void displaySystemStatus() {
         System.out.println("\n:bar_chart: SYSTEM STATUS:");
@@ -366,6 +380,9 @@ public class MainApplication {
         System.out.println();
     }
 
+
+
+
     private static void borrowItem(LibraryMember member) {
 
     }
@@ -382,6 +399,11 @@ public class MainApplication {
         
     }
     
+
+
+
+
+
     private static void itemManagement() {
         System.out.println("\n📚 ITEM MANAGEMENT:");
         System.out.println("1. View All Items");

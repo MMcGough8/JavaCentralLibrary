@@ -88,6 +88,4 @@ public abstract class LibraryItem implements Searchable {
      */
     public abstract String getItemType();
     
-    @Override
-    public abstract java.util.List<String> getSearchableFields();
 }
