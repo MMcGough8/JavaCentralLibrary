@@ -1,5 +1,6 @@
 package com.zipcodewilmington.centrallibrary;
 
+import java.io.Console;
 import java.io.FileReader;
 import java.util.List;
 import java.util.Scanner;
@@ -382,40 +383,92 @@ if (members != null) {
     }
 
     private static void borrowItem(LibraryMember member) {
-        System.out.println("\n BORROW AN ITEM");
+        System.out.println("\nBorrow an item");
         displayItemsWithIds();
-        System.out.println("Enter item ID to borrow or cancel item");
-
-
+        System.out.print("Enter the ID of the item to borrow: ");
+        String itemId = scanner.nextLine().trim();
         
-    }
-
-    private static void returnItem(LibraryMember member) {
-
-    }
-
-    private static void showBorrowedItems(LibraryMember member) {
-        List<LibraryItem> borrowed = member.getBorrowedItems();
-        if (borrowed.isEmpty()) {
-            System.out.println("\n You have no borrowed items.\n");
+        LibraryItem item = findItemById(itemId);
+        if (item == null) {
+            System.out.println("No item found with this ID: " + itemId);
             return;
         }
-        System.out.println("\n YOUR BORROWED ITEMS");
-        System.out.println("-".repeat(70));
-        for (int i = 0; i < borrowed.size(); i++) {
-            LibraryItem item = borrowed.get(i);
-            System.out.printf("%d, %s, (%s) - Days Left: %d days%n",
-                        i + 1,
-                        item.getTitle(), 
-                        item.getItemType(), 
-                        item.getMaxBorrowDays());
+        if (!item.isAvailable()) {
+            System.out.println("This item is already checked out.");
+            return;
         }
-        System.out.println();
-    }
+        member.borrowItem(item);
+        System.out.println("You borrowed " + item.getTitle() + "\n");
+}
 
-    private static void payFees(LibraryMember member) {
+
+    private static void returnItem(LibraryMember member) {
+        List<LibraryItem> borrowed = member.getBorrowedItems();
+        if (borrowed.isEmpty()) {
+            System.out.println("You have no items to return.\n");
+            return;
+        }
+        System.out.println("Your Borrowed Items:");
+        for (LibraryItem item : borrowed) {
+            System.out.println("- " + item.getId() + " : " + item.getTitle());
+        }
+        System.out.print("Enter the ID of the item to return: ");
+        String itemId = scanner.nextLine().trim();
         
+        LibraryItem toReturn = null;
+        for (LibraryItem item : borrowed) {
+            if (item.getId().equals(itemId)) {
+                toReturn = item;
+                break;
+            }
+        }
+        if (toReturn == null) {
+            System.out.println("You do not have an item with that ID.\n");
+            return;
+        }
+        int daysLate = getIntInput("Enter the number of days late: ");
+        member.returnItem(toReturn, daysLate);
+        System.out.println("Returned: " + toReturn.getTitle() + "\n");
+}
+
+private static void showBorrowedItems(LibraryMember member) {
+    System.out.println("\nYour Borrowed Items:");
+    List<LibraryItem> items = member.getBorrowedItems();
+    if (items.isEmpty()) {
+        System.out.println("You have not borrowed any items.\n");
+        return;
     }
+    System.out.println("-".repeat(60));
+    for (LibraryItem item : items) {
+        System.out.printf("%-10s %-30s %-10s%n",
+            item.getId(),
+            item.getTitle(),
+            item.getItemType()
+        );
+    }
+    System.out.println("-".repeat(60) + "\n");
+}
+
+private static void payFees(LibraryMember member) {
+    System.out.println("\nPay Outstanding Fees");
+    double fees = member.getOutstandingFees();
+    if (fees <= 0) {
+        System.out.println("You have no outstanding fees!\n");
+        return;
+    }
+    System.out.println("You currently owe: $" + fees);
+    System.out.print("Enter amount to pay: ");
+    double amount = getDoubleInput("Enter amount to pay: ");
+    
+    if (amount <= 0) {
+        System.out.println("Invalid amount.\n");
+        return;
+    }
+    member.payFees(amount);
+    System.out.println("Payment processed.");
+    System.out.println("Remaining balance: $" + member.getOutstandingFees() + "\n");
+}
+
     
     private static void itemManagement() {
         System.out.println("\n📚 ITEM MANAGEMENT:");
@@ -502,6 +555,17 @@ if (members != null) {
                 return Integer.parseInt(scanner.nextLine().trim());
             } catch (NumberFormatException e) {
                 System.out.println("❌ Please enter a valid number.");
+            }
+        }
+    }
+
+    private static double getDoubleInput(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                return Double.parseDouble(scanner.nextLine().trim());
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid number.");
             }
         }
     }
