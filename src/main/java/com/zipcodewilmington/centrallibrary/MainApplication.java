@@ -8,6 +8,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import java.util.List.*;
+import java.util.Date;
 
 
 public class MainApplication {
@@ -92,17 +93,16 @@ public class MainApplication {
 
     private static void initializeLibrarySystem() {
         JSONParser parser = new JSONParser();
-        
         try {
-            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("file.json"));
-
+            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("/Users/mmcgough/Projects/JavaCentralLibrary/src/main/java/com/zipcodewilmington/centrallibrary/file.json"));
+               
             String libraryName = (String) jsonObject.get("libraryName");
             String addressStr = (String) jsonObject.get("address");
             String[] partsA = addressStr.split(",");
-            Address address = new Address(partsA[0].trim(), partsA[1].trim(), partsA[2].trim(), Integer.parseInt(partsA[3].trim()));
+            Address address = new Address();
 
             centralLibrary = new Library(libraryName, address);
-
+System.out.println("Help!!"); 
             JSONArray librarians = (JSONArray) jsonObject.get("librarians");
             for (Object obj : librarians) {
                 JSONObject librarianJson = (JSONObject) obj;
@@ -152,7 +152,7 @@ public class MainApplication {
                 memberAddress);
     
             centralLibrary.addLibraryMember(member);
-        }
+        } 
 
             JSONArray books = (JSONArray) jsonObject.get("books");
             for (Object obj : books) {
