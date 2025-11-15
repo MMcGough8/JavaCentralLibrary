@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class Dvd extends LibraryItem implements Reservable {
     private String director;
-    private int duration; // in minutes
+    private long duration; // in minutes
     private String rating;
     private String genre;
     private boolean isReserved;
@@ -17,7 +17,7 @@ public class Dvd extends LibraryItem implements Reservable {
     /**
      * Constructor for Dvd
      */
-    public Dvd(String id, String title, String location, String director, int duration, String rating, String genre) {
+    public Dvd(String id, String title, String location, String director, long duration, String rating, String genre) {
         super(id, title, location);
         this.director = director;
         this.duration = duration;
@@ -31,7 +31,7 @@ public class Dvd extends LibraryItem implements Reservable {
         return this.director;
     }
 
-    public int getDuration() {
+    public long getDuration() {
         return this.duration;
     }
 
@@ -52,7 +52,7 @@ public class Dvd extends LibraryItem implements Reservable {
         this.director = director;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 
