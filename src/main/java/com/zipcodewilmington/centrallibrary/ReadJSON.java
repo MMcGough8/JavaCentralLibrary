@@ -15,11 +15,7 @@ public class ReadJSON {
         JSONParser parser = new JSONParser();
 
         try {
-<<<<<<< HEAD
             JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("/Users/dmurali/Projects/JavaCentralLibrary/src/main/java/com/zipcodewilmington/centrallibrary/file.json"));
-=======
-            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("/Users/mmcgough/Projects/JavaCentralLibrary/src/main/java/com/zipcodewilmington/centrallibrary/file.json"));
->>>>>>> master
 
 
             String libraryName = (String) jsonObject.get("libraryName");

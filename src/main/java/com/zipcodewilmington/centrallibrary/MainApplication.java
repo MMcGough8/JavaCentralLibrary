@@ -1,7 +1,10 @@
 package com.zipcodewilmington.centrallibrary;
 
 import java.io.Console;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Scanner;
 import org.json.simple.JSONArray;
@@ -99,8 +102,17 @@ public class MainApplication {
     private static void initializeLibrarySystem() {
         JSONParser parser = new JSONParser();
         try {
-            JSONObject jsonObject = (JSONObject) parser.parse(new FileReader("/Users/mmcgough/Projects/JavaCentralLibrary/src/main/java/com/zipcodewilmington/centrallibrary/file.json"));
-               
+            InputStream inputStream = MainApplication.class
+                .getClassLoader()
+                .getResourceAsStream("file.json");
+
+        if (inputStream == null) {
+            throw new FileNotFoundException("file.json not found in resources folder!");
+        }
+
+        JSONObject jsonObject = (JSONObject) parser.parse(new InputStreamReader(inputStream));
+
+
             String libraryName = (String) jsonObject.get("libraryName");
             String addressStr = (String) jsonObject.get("address");
             String[] parts = addressStr.split(",");
