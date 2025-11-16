@@ -54,7 +54,7 @@ public class Library {
     }
 
 
-    private void addItem(LibraryItem item) {
+    public void addItem(LibraryItem item) {
         if (item != null) {
             items.add(item);
         }

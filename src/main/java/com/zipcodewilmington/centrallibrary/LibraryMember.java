@@ -124,4 +124,16 @@ public class LibraryMember extends Person {
     public int hashCode() {
         return memberId.toLowerCase().hashCode();
     }
+
+    public LibraryMember() {
+        super("Test User", 30, "test@example.com", 1234567890);
+        this.memberId = "TEST123";
+        this.membershipDate = new Date();
+        this.address = new Address("Test St", "Test City", "TS", 00000);
+        this.borrowedItems = new ArrayList<>();
+        this.outstandingFees = 0.0;
+}
+
+
+
 }

@@ -1,5 +1,7 @@
 package com.zipcodewilmington.centrallibrary;
 
+import java.util.List;
+
 /**
  * Abstract LibraryItem class representing an item in the library.
  * Implements Searchable interface and serves as base class for Book, Periodical, and DVD.
@@ -87,5 +89,10 @@ public abstract class LibraryItem implements Searchable {
      * Abstract method for getting item type
      */
     public abstract String getItemType();
-    
+   
+    @Override
+    public List<String> getSearchableFields() {
+        return List.of(title, id, location);
+    }
+
 }
