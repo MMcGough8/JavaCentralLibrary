@@ -2,23 +2,24 @@ package com.zipcodewilmington.centrallibrary;
 
 public class Person {
 
-    protected String name;                // created with private fields to prevent access from outside the class
-    protected int age;
-    protected String email;
-    protected int phoneNumber;
-    
-    public Person(String name, int age, String email, int phoneNumber) {         // constructor with necessary fields
-        this.name = name;                                                              // using constructor call setter methods
-        this.age = age;                                                                // allows for validation checks (no negative ages, invalid phone numbers etc.)
-        this.email = email;                                
-        this.phoneNumber = phoneNumber;                 
+    private String name;
+    private int age;
+    private String email;
+    private int phoneNumber;
+
+    public Person(String name, int age, String email, int phoneNumber) {
+        setName(name);
+        setAge(age);
+        setEmail(email);
+        setPhoneNumber(phoneNumber);
     }
 
-    public String getName() {               // these are the getters: provide READ access to each private field
+  
+    public String getName() {
         return name;
     }
 
-    public int getAge() {                               
+    public int getAge() {
         return age;
     }
 
@@ -26,32 +27,39 @@ public class Person {
         return email;
     }
 
-    public  int getPhoneNumber() {
+    public int getPhoneNumber() {
         return phoneNumber;
-    }                                      // end of getters
+    }
 
-    public void setName(String name) {                      // Setters with validation as to not set things to unusable values
-        if (name == null || name.trim().isEmpty()) {        // if name is null or empty, throws an error
-            throw new Error("Name cannot be null or empty");
+
+    public void setName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be null or empty");
         }
         this.name = name.trim();
     }
 
-    public void setAge(int age) {                                      
-        if (age < 0 || age > 120) {                                           
-            throw new Error("Age must be between 0 and 120");   // age must be between 0 and 120 or else you get an error (sorry 121 year olds)
+    public void setAge(int age) {
+        if (age < 0 || age > 120) {
+            throw new IllegalArgumentException("Age must be between 0 and 120");
         }
         this.age = age;
     }
 
-
     public void setEmail(String email) {
         if (email == null || email.trim().isEmpty()) {
-            throw new Error("Email cannot be null or empty");
+            throw new IllegalArgumentException("Email cannot be null or empty");
         }
-        if (!email.contains("@") || !email.contains(".")) {             // if email is empty, null, doesnt contain an @, or doesnt contain a '.' : throw an error
-            throw new Error("Email must contain @ and a domain");
+        if (!email.contains("@") || !email.contains(".")) {
+            throw new IllegalArgumentException("Email must contain @ and a domain");
         }
         this.email = email.trim();
+    }
+
+    public void setPhoneNumber(int phoneNumber) {
+        if (phoneNumber <= 0) {
+            throw new IllegalArgumentException("Phone number must be a positive integer");
+        }
+        this.phoneNumber = phoneNumber;
     }
 }
