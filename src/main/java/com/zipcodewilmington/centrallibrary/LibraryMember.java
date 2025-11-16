@@ -14,14 +14,18 @@ public class LibraryMember extends Person {
     
     public LibraryMember(String name, int age, String email, int phoneNumber, 
                         String memberId, Date membershipDate, Address address) {
+        
         super(name, age, email, phoneNumber);
+        
         setMemberId(memberId);
         setMembershipDate(membershipDate);
         setAddress(address);
+        
         this.borrowedItems = new ArrayList<>();
         this.outstandingFees = 0.0;
     }
     
+
     public String getMemberId() {
         return memberId;
     }
@@ -42,66 +46,82 @@ public class LibraryMember extends Person {
         return address;
     }
     
+
     public void setMemberId(String memberId) {
         if (memberId == null || memberId.trim().isEmpty()) {
-            throw new Error("Member ID cannot be null or empty");
+            throw new IllegalArgumentException("Member ID cannot be null or empty");            
         }
         this.memberId = memberId.trim();
     }
     
     public void setMembershipDate(Date membershipDate) {
         if (membershipDate == null) {
-            throw new Error("Membership date cannot be null");
+            throw new IllegalArgumentException("Membership date cannot be null");
         }
         this.membershipDate = membershipDate;
     }
     
     public void setAddress(Address address) {
         if (address == null) {
-            throw new Error("Address cannot be null");
+            throw new IllegalArgumentException("Address cannot be null");
+
         }
         this.address = address;
     }
+
     
-    public void borrowItem(LibraryItem item) {
+     public void borrowItem(LibraryItem item) {
         if (item == null) {
-            throw new Error("Item cannot be null");
+            throw new IllegalArgumentException("Item cannot be null");
         }
         if (!item.isAvailable()) {
-            throw new Error("Item is not available for checkout");
+            throw new IllegalArgumentException("Item is not available for checkout");
         }
-        
+
         item.checkOut();
         borrowedItems.add(item);
     }
     
     public void returnItem(LibraryItem item, int daysLate) {
         if (item == null) {
-            throw new Error("Item cannot be null");
+            throw new IllegalArgumentException("Item cannot be null");
         }
         if (!borrowedItems.contains(item)) {
-            throw new Error("Item is not in this member's borrowed items");
+            throw new IllegalArgumentException("Item is not in this member's borrowed items");
         }
         if (daysLate < 0) {
-            throw new Error("Days late cannot be negative");
+            throw new IllegalArgumentException("Days late cannot be negative");
         }
-        
+
         item.checkIn();
         borrowedItems.remove(item);
-        
+
         if (daysLate > 0) {
-            double lateFee = item.calculateLateFee(daysLate);
-            outstandingFees += lateFee;
+            outstandingFees += item.calculateLateFee(daysLate);
         }
     }
     
     public void payFees(double amount) {
         if (amount < 0) {
-            throw new Error("Payment amount cannot be negative");
+            throw new IllegalArgumentException("Payment amount cannot be negative");
         }
         if (amount > outstandingFees) {
-            throw new Error("Payment amount cannot exceed outstanding fees");
+            throw new IllegalArgumentException("Payment amount cannot exceed outstanding fees");
         }
+
         outstandingFees -= amount;
-    }   
+    } 
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof LibraryMember)) return false;
+        LibraryMember other = (LibraryMember) obj;
+        return memberId.equalsIgnoreCase(other.memberId);
+    }
+
+    @Override
+    public int hashCode() {
+        return memberId.toLowerCase().hashCode();
+    }
 }
