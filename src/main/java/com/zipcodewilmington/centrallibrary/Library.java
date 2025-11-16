@@ -7,9 +7,15 @@ public class Library {
     // Private fields to store library info.
     private String name;
     private Address address;
-    private List<LibraryItem> items; 
-    private List<Librarian> librarians;
-    private List<LibraryMember> libraryMembers;
+    private List<Book> books = new ArrayList<>();
+    private List<Periodical> periodicals = new ArrayList<>();
+    private List<Dvd> dvds = new ArrayList<>();
+    private List<LibraryMember> libraryMembers = new ArrayList<>();
+    private List<Librarian> librarians = new ArrayList<>();
+    private List<LibraryItem> items = new ArrayList<>();
+
+
+
 
    
     //Constructor to initialize a new library with a name and address
@@ -48,12 +54,54 @@ public class Library {
     }
 
     public void addLibrarian(Librarian librarian) {
+        for (Librarian l : librarians) {
+            if (l.getEmployeeId().equalsIgnoreCase(librarian.getEmployeeId())) {
+                return;
+            }
+        }
         librarians.add(librarian);
     }
 
+   
     public void addLibraryMember(LibraryMember member) {
+        for (LibraryMember m : libraryMembers) {
+            if (m.getMemberId().equalsIgnoreCase(member.getMemberId())) {
+                return;
+            }
+        }
         libraryMembers.add(member);
     }
+
+
+    public void addBook(Book book) {
+            for (Book b : books) {
+                if (b.getIsbn().equalsIgnoreCase(book.getIsbn())) {
+                    return; 
+                }   
+          }
+        books.add(book);
+        items.add(book); 
+    }
+
+    public void addPeriodical(Periodical periodical) {
+    for (Periodical p : periodicals) {
+        if (p.getId().equalsIgnoreCase(periodical.getId())) {
+            return;
+        }
+    }
+    periodicals.add(periodical);
+    items.add(periodical);
+    }
+
+    public void addDvd(Dvd dvd) {
+    for (Dvd d : dvds) {
+        if (d.getId().equalsIgnoreCase(dvd.getId())) {
+            return;
+        }
+    }
+    dvds.add(dvd);
+    items.add(dvd);
+}
 
     // Metho to remove an item from the library by its ID 
     // Returns true if item was found and removed, otherwise false

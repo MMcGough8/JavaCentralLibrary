@@ -9,17 +9,20 @@ public class Book extends LibraryItem implements Reservable {
     private String author;
     private String genre;
     private int numOfPages;
+
     private boolean isReserved;
     private LibraryMember reservedBy;
     
     
     public Book(String author, String title, String isbn, String genre, int numOfPages) {
-        super(author, title, genre);
+        super("UNKNOWN", title, "UNKNOWN");   
+       
         this.author = author;
         this.title = title;
         this.isbn = isbn;
         this.genre = genre;
         this.numOfPages = numOfPages;
+        
         this.isReserved = false;
         this.reservedBy = null;
     }
@@ -39,12 +42,25 @@ public class Book extends LibraryItem implements Reservable {
         return daysOverdue * 0.50;  
     }
    
+    @Override
+    public String getTitle() {
+        return super.getTitle();
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
     public String getGenre() {
         return genre;
     }
 
-    public int numOfPages() {
+    public int getNumOfPages() {
         return numOfPages;
+    }
+
+    public String getIsbn() {
+    return isbn;
     }
 
     public boolean matchesKeyword(String keyword) {
@@ -76,7 +92,7 @@ public class Book extends LibraryItem implements Reservable {
         if (!isReserved) {
             throw new Error("Book is not currently reserved");
         }
-        if (reservedBy != libraryMember) {
+        if (!reservedBy.equals(libraryMember)) {
             throw new Error("Book is reserved by someone else");
         }
         this.isReserved = false; 
@@ -86,11 +102,12 @@ public class Book extends LibraryItem implements Reservable {
     @Override
     public List<String> getSearchableFields() {
         List<String> fields = new ArrayList<>();
-        fields.add(this.title);
-        fields.add(this.author);
-        fields.add(this.isbn);
-        fields.add(this.genre);
+        fields.add(getTitle());
+        fields.add(author);
+        fields.add(isbn);
+        fields.add(genre);
         return fields;
-    } 
+    }
+
 }
  

@@ -155,52 +155,55 @@ public class MainApplication {
             }
 
             JSONArray books = (JSONArray) jsonObject.get("books");
-            for (Object obj : books) {
-                JSONObject bookJson = (JSONObject) obj;
-    
-                Book book = new Book(
-                    (String) bookJson.get("author"),
-                    (String) bookJson.get("title"),
-                    (String) bookJson.get("isbn"),
-                    (String) bookJson.get("genre"),      
-                    ((Long) bookJson.get("pages")).intValue());
-    
-                centralLibrary.addItem(book);
-            }
+                for (Object obj : books) {
+                    JSONObject bookJson = (JSONObject) obj;
 
-            JSONArray periodicals = (JSONArray) jsonObject.get("periodicals");
-            for (Object obj : periodicals) {
-                JSONObject periodicalJson = (JSONObject) obj;
-    
-                Periodical periodical = new Periodical(
-                    (String) periodicalJson.get("id"),                  
-                    (String) periodicalJson.get("title"),              
-                    (String) periodicalJson.get("location"),          
-                    (String) periodicalJson.get("issueDate"),            
-                    (String) periodicalJson.get("issn"),                  
-                    ((Long) periodicalJson.get("volume")).intValue(),  
-                    ((Long) periodicalJson.get("issueNumber")).intValue(),
-                    (String) periodicalJson.get("publisher"),
-                    (String) periodicalJson.get("publicationDate"));
-    
-                centralLibrary.addItem(periodical);
-            }
+                    Book book = new Book(
+                        (String) bookJson.get("author"),
+                        (String) bookJson.get("title"),
+                        (String) bookJson.get("isbn"),
+                        (String) bookJson.get("genre"),
+                        ((Long) bookJson.get("pages")).intValue()
+                    );
 
-            JSONArray movies = (JSONArray) jsonObject.get("movies");
-            for (Object obj : movies) {
-                JSONObject movieJson = (JSONObject) obj;
-                
-                Dvd dvd = new Dvd(
-                    (String) movieJson.get("id"),
-                    (String) movieJson.get("title"),
-                    (String) movieJson.get("location"),
-                    (String) movieJson.get("director"),
-                    (Long) movieJson.get("duration"),
-                    (String) movieJson.get("rating"),
-                    (String) movieJson.get("genre"));
-    
-                centralLibrary.addItem(dvd);
-            }
+                    centralLibrary.addBook(book);  // DUPLICATE-CHECKED
+                }
+                    
+                JSONArray periodicals = (JSONArray) jsonObject.get("periodicals");
+                    for (Object obj : periodicals) {
+                        JSONObject periodicalJson = (JSONObject) obj;
+
+                        Periodical periodical = new Periodical(
+                            (String) periodicalJson.get("id"),
+                            (String) periodicalJson.get("title"),
+                            (String) periodicalJson.get("location"),
+                            (String) periodicalJson.get("issueDate"),
+                            (String) periodicalJson.get("issn"),
+                            ((Long) periodicalJson.get("volume")).intValue(),
+                            ((Long) periodicalJson.get("issueNumber")).intValue(),
+                            (String) periodicalJson.get("publisher"),
+                            (String) periodicalJson.get("publicationDate")
+                        );
+
+                        centralLibrary.addPeriodical(periodical);
+                    }
+
+                JSONArray movies = (JSONArray) jsonObject.get("movies");
+                for (Object obj : movies) {
+                    JSONObject movieJson = (JSONObject) obj;
+
+                    Dvd dvd = new Dvd(
+                        (String) movieJson.get("id"),
+                        (String) movieJson.get("title"),
+                        (String) movieJson.get("location"),
+                        (String) movieJson.get("director"),
+                        ((Long) movieJson.get("duration")),
+                        (String) movieJson.get("rating"),
+                        (String) movieJson.get("genre")
+                    );
+
+                    centralLibrary.addDvd(dvd);
+                }
         } catch (Exception e) {
             e.printStackTrace();
         }
