@@ -546,7 +546,7 @@ public class MainApplication {
         book.setId(id);
         book.setLocation(location);
 
-        centralLibrary.addItem(book);
+        centralLibrary.addBook(book);
         System.out.println("Book added sucessfully!\n");
     }
 
@@ -579,7 +579,7 @@ public class MainApplication {
 
         Periodical periodical = new Periodical(id, title, location, issueDate, issn, volume, issueNumber, publisher, publicationDate);
 
-        centralLibrary.addItem(periodical);
+        centralLibrary.addPeriodical(periodical);
         System.out.println("Periodical added successfully!\n");
     }
 
@@ -608,7 +608,7 @@ public class MainApplication {
 
         Dvd dvd = new Dvd(id, title, location, director, duration, rating, genre);
 
-        centralLibrary.addItem(dvd);
+        centralLibrary.addDvd(dvd);
         System.out.println("DVD added successfully!\n");
     }
 
