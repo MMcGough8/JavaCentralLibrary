@@ -461,25 +461,152 @@ public class MainApplication {
     
     private static void itemManagement() {
         System.out.println("\n📚 ITEM MANAGEMENT:");
-        System.out.println("1. View All Items");
+        System.out.println("1. Add New Item by ID");
         System.out.println("2. Remove Item by ID");
+        System.out.println("3. View All Items");
+        System.out.println("4. Back to Main Menu");
         
-        int choice = getIntInput("Choose option (1-2): ");
+        int choice = getIntInput("Choose option (1-4): ");
         
         switch (choice) {
             case 1:
-                centralLibrary.displayAllItems();
+                addNewItem();
                 break;
             case 2:
+                centralLibrary.displayAllItems();
+                break;
+            case 3:
                 System.out.print("Enter Item ID to remove: ");
                 String itemId = scanner.nextLine().trim();
                 if (centralLibrary.removeItem(itemId)) {
-                    System.out.println("✅ Item removed successfully!\n");
+                    System.out.println("Item removed successfully!\n");
                 } else {
-                    System.out.println("❌ Item not found.\n");
+                    System.out.println("Item not found.\n");
                 }
                 break;
+            case 4:
+                return;
+            default:
+                System.out.println("Invalid choice.\n");
         }
+    }
+
+    public static void addNewItem() {
+        System.out.println("\n Add New Item:");
+        System.out.println("1. Add Book");
+        System.out.println("2. Add Periodical");
+        System.out.println("3. Add DVD");
+        System.out.println("4. Back");
+        
+        int choice = getIntInput("Choose item type (1-4):");
+        switch (choice) {
+            case 1:
+                addBook();
+                break;
+            case 2:
+                addPeriodical();
+                break;
+            case 3:
+                addDvd();
+                break;
+            case 4:
+                return;
+            default:
+                System.out.println("Invalid choice.\n");
+        }
+    }
+
+    private static void addBook() {
+        System.out.println("\nAdd New Book:");
+
+        System.out.print("Enter Book ID:");
+        String id = scanner.nextLine().trim();
+
+        System.out.print("Enter Title: ");
+        String title = scanner.nextLine().trim();
+
+        System.out.print("Enter Author: ");
+        String author = scanner.nextLine().trim();
+
+        System.out.print("Enter ISBN: ");
+        String isbn = scanner.nextLine().trim();
+
+        System.out.print("Enter Genre: ");
+        String genre = scanner.nextLine().trim();
+
+        int pages = getIntInput("Enter Number of Pages: ");
+
+        System.out.print("Enter Location: ");
+        String location = scanner.nextLine().trim();
+
+        Book book = new Book(author, title, isbn, genre, pages);
+        book.setId(id);
+        book.setLocation(location);
+
+        centralLibrary.addItem(book);
+        System.out.println("Book added sucessfully!\n");
+    }
+
+    private static void addPeriodical() {
+        System.out.println("\nAdd New Periodical:");
+
+        System.out.print("Enter Periodical ID: ");
+        String id = scanner.nextLine().trim();
+
+        System.out.print("Enter Title: ");
+        String title = scanner.nextLine().trim();
+
+        System.out.print("Enter Location");
+        String location = scanner.nextLine().trim();
+
+        System.out.print("Enter Issue Date: ");
+        String issueDate = scanner.nextLine().trim();
+
+        System.out.print("Enter ISSN: ");
+        String issn = scanner.nextLine().trim();
+
+        int volume = getIntInput("Enter Volume:");
+        int issueNumber = getIntInput("Enter Issue Number: ");
+
+        System.out.print("Enter Publisher: ");
+        String publisher = scanner.nextLine().trim();
+
+        System.out.print("Enter Publication Date: ");
+        String publicationDate = scanner.nextLine().trim();
+
+        Periodical periodical = new Periodical(id, title, location, issueDate, issn, volume, issueNumber, publisher, publicationDate);
+
+        centralLibrary.addItem(periodical);
+        System.out.println("Periodical added successfully!\n");
+    }
+
+    private static void addDvd() {
+        System.out.println("\nAdd New DVD:");
+
+        System.out.print("Enter DVD ID: ");
+        String id = scanner.nextLine().trim();
+
+        System.out.print("Enter Title: ");
+        String title = scanner.nextLine().trim();
+
+        System.out.print("Enter Location: ");
+        String location = scanner.nextLine().trim();
+
+        System.out.print("Enter Directior: ");
+        String director = scanner.nextLine().trim();
+
+        int duration = getIntInput("Enter Duration (minutes): ");
+
+        System.out.print("Enter Rating (ex: PG, PG13, R): ");
+        String rating = scanner.nextLine().trim();
+
+        System.out.print("Enter Genre: ");
+        String genre = scanner.nextLine().trim();
+
+        Dvd dvd = new Dvd(id, title, location, director, duration, rating, genre);
+
+        centralLibrary.addItem(dvd);
+        System.out.println("DVD added successfully!\n");
     }
 
     private static void viewAllMembers() {
