@@ -85,11 +85,11 @@ public class Library {
     public void addBook(Book book) {
         if (book == null || book.getIsbn() == null) return;
 
-        for (Book b : books) {
-            if (b.getIsbn().equalsIgnoreCase(book.getIsbn())) {
-                return;
-            }
-        }
+        // for (Book b : books) {
+        //     if (b.getIsbn().equalsIgnoreCase(book.getIsbn())) {
+        //         return;
+        //     }
+        // }
         books.add(book);
         addItem(book);
     }
@@ -97,11 +97,11 @@ public class Library {
     public void addPeriodical(Periodical periodical) {
         if (periodical == null || periodical.getId() == null) return;
 
-        for (Periodical p : periodicals) {
-            if (p.getId().equalsIgnoreCase(periodical.getId())) {
-                return; 
-            }
-        }
+        // for (Periodical p : periodicals) {
+        //     if (p.getId().equalsIgnoreCase(periodical.getId())) {
+        //         return; 
+        //     }
+        // }
         periodicals.add(periodical);
         addItem(periodical);
     }
@@ -109,11 +109,11 @@ public class Library {
     public void addDvd(Dvd dvd) {
         if (dvd == null || dvd.getId() == null) return;
 
-        for (Dvd d : dvds) {
-            if (d.getId().equalsIgnoreCase(dvd.getId())) {
-                return; 
-            }
-        }
+        // for (Dvd d : dvds) {
+        //     if (d.getId().equalsIgnoreCase(dvd.getId())) {
+        //         return; 
+        //     }
+        // }
         dvds.add(dvd);
         addItem(dvd);
     }
