@@ -433,7 +433,6 @@ public class MainApplication {
 
     private static void borrowItem(LibraryMember member) {
         System.out.println("\nBorrow an item");
-        displayItemsWithIds();
         System.out.print("Enter the ID of the item to borrow: ");
         String itemId = scanner.nextLine().trim();
 
