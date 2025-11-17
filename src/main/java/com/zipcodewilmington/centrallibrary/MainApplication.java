@@ -385,7 +385,7 @@ public class MainApplication {
             System.out.println("8. Back to Login Menu");
             System.out.println("══════════════════════════════════════");
 
-            int choice = getIntInput("Choose option (1-7): ");
+            int choice = getIntInput("Choose option (1-8): ");
 
             switch (choice) {
                 case 1:
