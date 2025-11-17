@@ -378,10 +378,11 @@ public class MainApplication {
             System.out.println("1. Borrow Item");
             System.out.println("2. Return Item");
             System.out.println("3. My Borrowed Items");
-            System.out.println("4. Check Outstanding Fees");
-            System.out.println("5. Pay Fees");
-            System.out.println("6. My Account Info");
-            System.out.println("7. Back to Login Menu");
+            System.out.println("4. Search Library");
+            System.out.println("5. Check Outstanding Fees");
+            System.out.println("6. Pay Fees");
+            System.out.println("7. My Account Info");
+            System.out.println("8. Back to Login Menu");
             System.out.println("══════════════════════════════════════");
 
             int choice = getIntInput("Choose option (1-7): ");
@@ -397,15 +398,18 @@ public class MainApplication {
                     showBorrowedItems(member);
                     break;
                 case 4:
-                    System.out.printf("Outstanding fees: $%.2f%n%n", member.getOutstandingFees());
+                    searchLibrary();
                     break;
                 case 5:
-                    payFees(member);
+                    System.out.printf("Outstanding fees: $%.2f%n%n", member.getOutstandingFees());
                     break;
                 case 6:
-                    showMemberInfo(member);
+                    payFees(member);
                     break;
                 case 7:
+                    showMemberInfo(member);
+                    break;
+                case 8:
                     return;
                 default:
                     System.out.println("Invalid choice.\n");
