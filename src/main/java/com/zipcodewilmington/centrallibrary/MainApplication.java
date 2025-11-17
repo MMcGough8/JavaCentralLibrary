@@ -522,10 +522,11 @@ public class MainApplication {
             System.out.println("1. Add/Remove Items");
             System.out.println("2. View All Members");
             System.out.println("3. Generate Late Fee Report");
-            System.out.println("4. System Status");
-            System.out.println("5. Back to Login Menu");
+            System.out.println("4. Search Library");
+            System.out.println("5. System Status");
+            System.out.println("6. Back to Login Menu");
 
-            int choice = getIntInput("Choose option (1-5): ");
+            int choice = getIntInput("Choose option (1-6): ");
 
             switch (choice) {
                 case 1:
@@ -538,9 +539,12 @@ public class MainApplication {
                     centralLibrary.generateLateFeeReport();
                     break;
                 case 4:
-                    displaySystemStatus();
+                    searchLibrary();
                     break;
                 case 5:
+                    displaySystemStatus();
+                    break;
+                case 6:
                     return;
                 default:
                     System.out.println("Invalid choice.\n");
