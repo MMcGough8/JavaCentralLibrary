@@ -19,13 +19,13 @@ public class MainApplication {
     public static void main(String[] args) {
         System.out.println("---------------------------------------------------------------------------------------");
         System.out.println();
-        System.out.println("🏛️ === Welcome to the Central Library System! === 🏛️");
+        System.out.println("=== Welcome to the Central Library System! ===");
         System.out.println();
 
         initializeLibrarySystem();
         loginMenu();
 
-        System.out.println("📚 Thank you for using Central Library! 📚");
+        System.out.println("Thank you for using Central Library!");
     }
 
     public static void loginMenu() {
@@ -95,6 +95,132 @@ public class MainApplication {
     }
 
     private static void initializeLibrarySystem() {
+        initializeLibraryDatabase();
+        readInBooks();
+        readInDvds();
+        readInPeriodicals();
+    }
+
+    private static void readInBooks() {
+        JSONParser parser = new JSONParser();
+        try {
+            InputStream inputStream = MainApplication.class
+                    .getClassLoader()
+                    .getResourceAsStream("books.json");
+
+            if (inputStream == null) {
+                throw new FileNotFoundException("file.json not found in resources folder!");
+            }
+
+            JSONArray books = (JSONArray) parser.parse(new InputStreamReader(inputStream));
+            int id = 3;
+            int location = 3;
+            if (books != null) {
+                for (Object obj : books) {
+                    JSONObject bookJson = (JSONObject) obj;
+
+                    Book book = new Book(
+                            (String) bookJson.get("Authors"),
+                            (String) bookJson.get("Title"),
+                            (String) bookJson.get("isbn"),
+                            (String) bookJson.get("Bookshelves"),
+                            ((Long) bookJson.get("pages")).intValue()
+                    );
+                    book.setId("B" + String.format("%03d", id));
+                    book.setLocation("A" + String.valueOf(location));
+                    id++;
+                    location++;
+                    centralLibrary.addBook(book);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error initializing library system from JSON.");
+        }
+    }
+
+    private static void readInDvds() {
+        JSONParser parser = new JSONParser();
+        try {
+            InputStream inputStream = MainApplication.class
+                    .getClassLoader()
+                    .getResourceAsStream("dvds.json");
+
+            if (inputStream == null) {
+                throw new FileNotFoundException("file.json not found in resources folder!");
+            }
+
+            JSONArray movies = (JSONArray) parser.parse(new InputStreamReader(inputStream));
+            int id = 7;
+            int location = 7;
+            if (movies != null) {
+                for (Object obj : movies) {
+                    JSONObject movieJson = (JSONObject) obj;
+
+                    Dvd dvd = new Dvd(
+                            "D" + String.format("%03d", id),
+                            (String) movieJson.get("title"),
+                            "D" + String.valueOf(location),
+                            (String) movieJson.get("director"),
+                            (Long) movieJson.get("duration"),
+                            (String) movieJson.get(""),
+                            (String) movieJson.get("genres")
+                    );
+
+                    id++;
+                    location++;
+                    centralLibrary.addDvd(dvd);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error initializing library system from JSON.");
+        }
+    }
+
+    private static void readInPeriodicals() {
+        JSONParser parser = new JSONParser();
+        try {
+            InputStream inputStream = MainApplication.class
+                    .getClassLoader()
+                    .getResourceAsStream("periodicals.json");
+
+            if (inputStream == null) {
+                throw new FileNotFoundException("file.json not found in resources folder!");
+            }
+
+            JSONArray periodicals = (JSONArray) parser.parse(new InputStreamReader(inputStream));
+            int id = 3;
+            int location = 3;
+
+            if (periodicals != null) {
+                for (Object obj : periodicals) {
+                    JSONObject periodicalJson = (JSONObject) obj;
+
+                    Periodical periodical = new Periodical(
+                            "P" + String.format("%03d", id),
+                            (String) periodicalJson.get("title"),
+                            "P" + String.valueOf(location),
+                            "01/01/1990",
+                            (String) periodicalJson.get("issn"),
+                            1,
+                            1,
+                            (String) periodicalJson.get("publisher"),
+                            (String) periodicalJson.get("start_date")
+                    );
+
+                    id++;
+                    location++;
+                    centralLibrary.addPeriodical(periodical);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error initializing library system from JSON.");
+        }
+    }
+
+    private static void initializeLibraryDatabase() {
         JSONParser parser = new JSONParser();
         try {
             InputStream inputStream = MainApplication.class
@@ -209,25 +335,25 @@ public class MainApplication {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("❌ Error initializing library system from JSON.");
+            System.out.println("Error initializing library system from JSON.");
         }
     }
 
     private static void displaySystemStatus() {
-        System.out.println("\n📊 SYSTEM STATUS:");
+        System.out.println("\nSYSTEM STATUS:");
         System.out.println("Library: " + centralLibrary.getName());
         Address addr = centralLibrary.getAddress();
         System.out.printf("Address: %s, %s, %s %d%n",
                 addr.getStreetName(), addr.getCity(), addr.getState(), addr.getZipCode());
-        System.out.println("📚 Items: " + centralLibrary.getItems().size());
-        System.out.println("👥 Members: " + centralLibrary.getLibraryMembers().size());
-        System.out.println("👨‍💼 Librarians: " + centralLibrary.getLibrarians().size());
+        System.out.println("Items: " + centralLibrary.getItems().size());
+        System.out.println("Members: " + centralLibrary.getLibraryMembers().size());
+        System.out.println("Librarians: " + centralLibrary.getLibrarians().size());
         System.out.println();
     }
 
     @SuppressWarnings("unused")
     private static void memberOperations() {
-        System.out.println("\n👤 MEMBER OPERATIONS:");
+        System.out.println("\nMEMBER OPERATIONS:");
         System.out.println("Available Members:");
         List<LibraryMember> members = centralLibrary.getLibraryMembers();
         for (int i = 0; i < members.size(); i++) {
@@ -247,15 +373,15 @@ public class MainApplication {
 
     private static void memberMenu(LibraryMember member) {
         while (true) {
-            System.out.printf("\n👤 MEMBER MENU - %s\n", member.getName());
+            System.out.printf("\nMEMBER MENU - %s\n", member.getName());
             System.out.println("══════════════════════════════════════");
-            System.out.println("1. 📖 Borrow Item");
-            System.out.println("2. 📚 Return Item");
-            System.out.println("3. 📋 My Borrowed Items");
-            System.out.println("4. 💰 Check Outstanding Fees");
-            System.out.println("5. 💳 Pay Fees");
-            System.out.println("6. 👤 My Account Info");
-            System.out.println("7. 🔙 Back to Login Menu");
+            System.out.println("1. Borrow Item");
+            System.out.println("2. Return Item");
+            System.out.println("3. My Borrowed Items");
+            System.out.println("4. Check Outstanding Fees");
+            System.out.println("5. Pay Fees");
+            System.out.println("6. My Account Info");
+            System.out.println("7. Back to Login Menu");
             System.out.println("══════════════════════════════════════");
 
             int choice = getIntInput("Choose option (1-7): ");
@@ -271,7 +397,7 @@ public class MainApplication {
                     showBorrowedItems(member);
                     break;
                 case 4:
-                    System.out.printf("💰 Outstanding fees: $%.2f%n%n", member.getOutstandingFees());
+                    System.out.printf("Outstanding fees: $%.2f%n%n", member.getOutstandingFees());
                     break;
                 case 5:
                     payFees(member);
@@ -282,13 +408,13 @@ public class MainApplication {
                 case 7:
                     return;
                 default:
-                    System.out.println("❌ Invalid choice.\n");
+                    System.out.println("Invalid choice.\n");
             }
         }
     }
 
     private static void showMemberInfo(LibraryMember member) {
-        System.out.printf("\n👤 ACCOUNT INFO - %s:%n", member.getName());
+        System.out.printf("\nACCOUNT INFO - %s:%n", member.getName());
         System.out.println("─".repeat(40));
         System.out.println("Member ID: " + member.getMemberId());
         System.out.println("Email: " + member.getEmail());
@@ -302,7 +428,7 @@ public class MainApplication {
     }
 
     private static void borrowItem(LibraryMember member) {
-        System.out.println("\n📖 Borrow an item");
+        System.out.println("\nBorrow an item");
         displayItemsWithIds();
         System.out.print("Enter the ID of the item to borrow: ");
         String itemId = scanner.nextLine().trim();
@@ -368,7 +494,7 @@ public class MainApplication {
     }
 
     private static void payFees(LibraryMember member) {
-        System.out.println("\n💳 Pay Outstanding Fees");
+        System.out.println("\nPay Outstanding Fees");
         double fees = member.getOutstandingFees();
         if (fees <= 0) {
             System.out.println("You have no outstanding fees!\n");
@@ -386,18 +512,18 @@ public class MainApplication {
             System.out.println("Payment processed.");
             System.out.println("Remaining balance: $" + member.getOutstandingFees() + "\n");
         } catch (IllegalArgumentException ex) {
-            System.out.println("❌ " + ex.getMessage());
+            System.out.println(ex.getMessage());
         }
     }
 
     private static void librarianOperations() {
         while (true) {
-            System.out.println("\n👨‍💼 LIBRARIAN OPERATIONS:");
-            System.out.println("1. 📚 Add/Remove Items");
-            System.out.println("2. 👥 View All Members");
-            System.out.println("3. 📊 Generate Late Fee Report");
-            System.out.println("4. ℹ️  System Status");
-            System.out.println("5. 🔙 Back to Login Menu");
+            System.out.println("\nLIBRARIAN OPERATIONS:");
+            System.out.println("1. Add/Remove Items");
+            System.out.println("2. View All Members");
+            System.out.println("3. Generate Late Fee Report");
+            System.out.println("4. System Status");
+            System.out.println("5. Back to Login Menu");
 
             int choice = getIntInput("Choose option (1-5): ");
 
@@ -417,14 +543,14 @@ public class MainApplication {
                 case 5:
                     return;
                 default:
-                    System.out.println("❌ Invalid choice.\n");
+                    System.out.println("Invalid choice.\n");
             }
         }
     }
 
 
     private static void itemManagement() {
-        System.out.println("\n📚 ITEM MANAGEMENT:");
+        System.out.println("\nITEM MANAGEMENT:");
         System.out.println("1. Add New Item");
         System.out.println("2. Remove Item by ID");
         System.out.println("3. View All Items");
@@ -456,7 +582,7 @@ public class MainApplication {
     }
 
     public static void addNewItem() {
-        System.out.println("\n➕ Add New Item:");
+        System.out.println("\nAdd New Item:");
         System.out.println("1. Add Book");
         System.out.println("2. Add Periodical");
         System.out.println("3. Add DVD");
@@ -482,7 +608,7 @@ public class MainApplication {
     }
 
     private static void addBook() {
-        System.out.println("\n📚 Add New Book:");
+        System.out.println("\nAdd New Book:");
 
         System.out.print("Enter Book ID: ");
         String id = scanner.nextLine().trim();
@@ -513,7 +639,7 @@ public class MainApplication {
     }
 
     private static void addPeriodical() {
-        System.out.println("\n📰 Add New Periodical:");
+        System.out.println("\nAdd New Periodical:");
 
         System.out.print("Enter Periodical ID: ");
         String id = scanner.nextLine().trim();
@@ -546,7 +672,7 @@ public class MainApplication {
     }
 
     private static void addDvd() {
-        System.out.println("\n💿 Add New DVD:");
+        System.out.println("\nAdd New DVD:");
 
         System.out.print("Enter DVD ID: ");
         String id = scanner.nextLine().trim();
@@ -575,7 +701,7 @@ public class MainApplication {
     }
 
     private static void viewAllMembers() {
-        System.out.println("\n👥 ALL LIBRARY MEMBERS:");
+        System.out.println("\nALL LIBRARY MEMBERS:");
         System.out.println("─".repeat(60));
         for (LibraryMember member : centralLibrary.getLibraryMembers()) {
             System.out.printf("• %s (ID: %s) - Fees: $%.2f - Items: %d%n",
@@ -586,20 +712,20 @@ public class MainApplication {
     }
 
     private static void searchLibrary() {
-        System.out.print("\n🔍 Enter search keyword: ");
+        System.out.print("\nEnter search keyword: ");
         String keyword = scanner.nextLine().trim();
 
         List<LibraryItem> results = centralLibrary.searchItems(keyword);
 
         if (results.isEmpty()) {
-            System.out.println("❌ No items found matching '" + keyword + "'.\n");
+            System.out.println("No items found matching '" + keyword + "'.\n");
             return;
         }
 
-        System.out.println("\n🔍 SEARCH RESULTS for '" + keyword + "':");
+        System.out.println("\nSEARCH RESULTS for '" + keyword + "':");
         System.out.println("─".repeat(60));
         for (LibraryItem item : results) {
-            String status = item.isAvailable() ? "✅ Available" : "❌ Checked Out";
+            String status = item.isAvailable() ? "Available" : "Checked Out";
             System.out.printf("• %s (%s) - ID: %s - %s%n",
                     item.getTitle(), item.getItemType(), item.getId(), status);
         }
@@ -607,12 +733,12 @@ public class MainApplication {
     }
 
     private static void displayItemsWithIds() {
-        System.out.println("📚 AVAILABLE LIBRARY ITEMS:");
+        System.out.println("AVAILABLE LIBRARY ITEMS:");
         System.out.println("─".repeat(70));
         System.out.printf("%-8s %-15s %-30s %-15s%n", "ID", "Type", "Title", "Status");
         System.out.println("─".repeat(70));
         for (LibraryItem item : centralLibrary.getItems()) {
-            String availability = item.isAvailable() ? "✅ Available" : "❌ Checked Out";
+            String availability = item.isAvailable() ? "Available" : "Checked Out";
             System.out.printf("%-8s %-15s %-30s %-15s%n",
                     item.getId(), item.getItemType(), item.getTitle(), availability);
         }
@@ -635,7 +761,7 @@ public class MainApplication {
             try {
                 return Integer.parseInt(scanner.nextLine().trim());
             } catch (NumberFormatException e) {
-                System.out.println("❌ Please enter a valid number.");
+                System.out.println("Please enter a valid number.");
             }
         }
     }
@@ -646,7 +772,7 @@ public class MainApplication {
             try {
                 return Double.parseDouble(scanner.nextLine().trim());
             } catch (NumberFormatException e) {
-                System.out.println("❌ Please enter a valid number.");
+                System.out.println("Please enter a valid number.");
             }
         }
     }
